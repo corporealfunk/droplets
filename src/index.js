@@ -1,1 +1,1 @@
-alert('hello world droplets');
+console.log('xyz: hello world droplets');

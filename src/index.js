@@ -7,9 +7,11 @@ import './index.css';
 import * as Tone from 'tone';
 import FmTone from './fm_tone';
 import FmGen from './fm_gen';
+import run from './score';
 
 const button = document.getElementById('go');
 const goGen = document.getElementById('goGen');
+const goRun = document.getElementById('goRun');
 
 const carrierInput = document.getElementById('carrier');
 const moudulatorInput = document.getElementById('modulator');
@@ -81,5 +83,17 @@ goGen.addEventListener('click', async (e) => {
     carrierFreq: 440,
   });
 
+  newTone.start().connect(outGain);
+});
+
+goRun.addEventListener('click', async (e) => {
+  e.preventDefault();
+  await Tone.start();
+
+  const outGain = new Tone.Gain(0.3).toDestination();
+
+  const note = run();
+  console.log(note);
+  const newTone = new FmGen(note);
   newTone.start().connect(outGain);
 });

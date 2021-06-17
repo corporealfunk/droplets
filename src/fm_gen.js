@@ -11,6 +11,7 @@ export default class {
     modIndexStop,
     modulatorFreq,
     carrierFreq,
+    panning,
   }) {
     this.attackLength = length * attackRatio;
     this.sustainLength = length * sustainRatio;
@@ -24,6 +25,7 @@ export default class {
     this.modulatorFreq = new Tone.Signal(modulatorFreq);
     this.amplitude = new Tone.Signal(0);
     this.modIndex = new Tone.Signal(modIndexStart);
+    this.panner = new Tone.Panner(panning);
   }
 
   start() {
@@ -55,7 +57,9 @@ export default class {
       this.dispose();
     }, (this.length * 1000) + 50);
 
-    return this.tone.start();
+    this.tone.start().connect(this.panner);
+    this.output = this.panner;
+    return this.output;
   }
 
   dispose() {
@@ -64,5 +68,6 @@ export default class {
     this.amplitude.dispose();
     this.modIndex.dispose();
     this.tone.dispose();
+    this.panner.dispose();
   }
 }

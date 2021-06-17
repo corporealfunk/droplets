@@ -71,13 +71,13 @@ goGen.addEventListener('click', async (e) => {
   const outGain = new Tone.Gain(0.8).toDestination();
 
   const newTone = new FmGen({
-    length: 10,
+    length: 60,
     attackRatio: 0.25,
     sustainRatio: 0.25,
-    releaseRatio: 0.5,
+    sustainAmplitude: 0.5,
     modIndexStart: 150,
     modIndexStop: 10,
-    modulatorFreq: 443,
+    modulatorFreq: 843,
     carrierFreq: 440,
   });
 

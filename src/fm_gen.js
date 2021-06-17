@@ -6,7 +6,7 @@ export default class {
     length,
     attackRatio,
     sustainRatio,
-    releaseRatio,
+    sustainAmplitude,
     modIndexStart,
     modIndexStop,
     modulatorFreq,
@@ -14,7 +14,7 @@ export default class {
   }) {
     this.attackLength = length * attackRatio;
     this.sustainLength = length * sustainRatio;
-    this.releaseLength = length * releaseRatio;
+    this.sustainAmplitude = sustainAmplitude;
 
     this.length = length;
     this.modIndexStart = modIndexStart;
@@ -27,6 +27,10 @@ export default class {
   }
 
   start() {
+    const { currentTime } = Tone.context;
+
+    const getTimeAt = (time) => time + currentTime;
+
     this.tone = new FmTone({
       modulatorFreq: this.modulatorFreq,
       carrierFreq: this.carrierFreq,
@@ -34,15 +38,18 @@ export default class {
       amplitude: this.amplitude,
     });
 
-    // schedule the ramps:
-    const { currentTime } = Tone.context;
-    this.amplitude.setValueAtTime(0, currentTime);
-    this.amplitude.linearRampToValueAtTime(1, currentTime + this.attackLength);
+    // schedule the amplitude envelope:
+    this.amplitude.setValueAtTime(0, getTimeAt(0));
+    this.amplitude.linearRampToValueAtTime(1, getTimeAt(this.attackLength));
     this.amplitude.linearRampToValueAtTime(
-      0.4,
-      currentTime + this.attackLength + this.sustainLength,
+      this.sustainAmplitude,
+      getTimeAt(this.attackLength + this.sustainLength),
     );
-    this.amplitude.linearRampToValueAtTime(0, currentTime + this.length);
+    this.amplitude.linearRampToValueAtTime(0, getTimeAt(this.length));
+
+    // schedule the modIndex envelope:
+    this.modIndex.setValueAtTime(this.modIndexStart, getTimeAt(0));
+    this.modIndex.linearRampToValueAtTime(this.modIndexStop, getTimeAt(this.length));
 
     setTimeout(() => {
       this.dispose();

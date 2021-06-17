@@ -12,17 +12,22 @@ const button = document.getElementById('go');
 const carrierInput = document.getElementById('carrier');
 const moudulatorInput = document.getElementById('modulator');
 const modulationIndexInput = document.getElementById('modulationIndex');
+const amplitudeInput = document.getElementById('amplitude');
 
 const carrierFreq = new Tone.Signal({
   value: carrierInput.value,
 });
 
 const modulatorFreq = new Tone.Signal({
-  value: moudulatorInput.value,
+  value: parseInt(moudulatorInput.value, 10),
 });
 
 const modulationIndex = new Tone.Signal({
-  value: modulationIndexInput.value,
+  value: parseInt(modulationIndexInput.value, 10),
+});
+
+const amplitude = new Tone.Signal({
+  value: parseInt(amplitudeInput.value, 10) / 100,
 });
 
 carrierInput.addEventListener('change', (e) => {
@@ -37,6 +42,10 @@ modulationIndexInput.addEventListener('change', (e) => {
   modulationIndex.value = parseInt(e.target.value, 10);
 });
 
+amplitudeInput.addEventListener('change', (e) => {
+  amplitude.value = parseInt(e.target.value, 10) / 100;
+});
+
 button.addEventListener('click', async (e) => {
   e.preventDefault();
   await Tone.start();
@@ -47,6 +56,7 @@ button.addEventListener('click', async (e) => {
     modulatorFreq,
     carrierFreq,
     modulationIndex,
+    amplitude,
   });
 
   newTone.start().connect(outGain);

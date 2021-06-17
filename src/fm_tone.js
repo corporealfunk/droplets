@@ -10,6 +10,8 @@ export default class {
     carrierFreq,
     // signal
     modulationIndex,
+    // amplitude
+    amplitude,
   }) {
     this.carrier = new Tone.Oscillator(0, 'sine');
 
@@ -31,11 +33,14 @@ export default class {
 
     // the offset output is sent to the carrier
     modOffset.connect(this.carrier.frequency);
+
+    this.amplitudeGain = new Tone.Gain();
+    amplitude.connect(this.amplitudeGain.gain);
   }
 
   start() {
     this.modulator.start();
-    this.carrier.start();
-    return this.carrier;
+    this.carrier.connect(this.amplitudeGain).start();
+    return this.amplitudeGain;
   }
 }

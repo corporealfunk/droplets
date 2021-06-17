@@ -8,14 +8,33 @@ import * as Tone from 'tone';
 import FmTone from './fm_tone';
 
 const button = document.getElementById('go');
-const inputHz = document.getElementById('hz');
 
-const frequency = new Tone.Signal({
-  value: inputHz.value,
+const carrierInput = document.getElementById('carrier');
+const moudulatorInput = document.getElementById('modulator');
+const modulationIndexInput = document.getElementById('modulationIndex');
+
+const carrierFreq = new Tone.Signal({
+  value: carrierInput.value,
 });
 
-inputHz.addEventListener('change', (e) => {
-  frequency.value = parseInt(e.target.value, 10);
+const modulatorFreq = new Tone.Signal({
+  value: moudulatorInput.value,
+});
+
+const modulationIndex = new Tone.Signal({
+  value: modulationIndexInput.value,
+});
+
+carrierInput.addEventListener('change', (e) => {
+  carrierFreq.value = parseInt(e.target.value, 10);
+});
+
+moudulatorInput.addEventListener('change', (e) => {
+  modulatorFreq.value = parseInt(e.target.value, 10);
+});
+
+modulationIndexInput.addEventListener('change', (e) => {
+  modulationIndex.value = parseInt(e.target.value, 10);
 });
 
 button.addEventListener('click', async (e) => {
@@ -25,10 +44,10 @@ button.addEventListener('click', async (e) => {
   const outGain = new Tone.Gain(0.8).toDestination();
 
   const newTone = new FmTone({
-    moudulatorFreq: 100,
-    carrierFreq: 440,
-    modulationIndex: 150,
+    modulatorFreq,
+    carrierFreq,
+    modulationIndex,
   });
 
-  newTone.start.connect(outGain);
+  newTone.start().connect(outGain);
 });

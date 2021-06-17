@@ -17,22 +17,22 @@ export default class {
 
     // mod up and down by 100 hz
     // Offset by carrier hz
-    const modOffset = new Tone.Add();
-    carrierFreq.connect(modOffset.addend);
+    this.modOffset = new Tone.Add();
+    carrierFreq.connect(this.modOffset.addend);
 
     // chain the swing and the offset
     this.modulator = new Tone.Oscillator();
     this.modulator.type = 'sine';
     modulatorFreq.connect(this.modulator.frequency);
 
-    const modIndexMult = new Tone.Multiply();
-    modulationIndex.connect(modIndexMult.factor);
+    this.modIndexMult = new Tone.Multiply();
+    modulationIndex.connect(this.modIndexMult.factor);
 
-    const normalizer = new Tone.Gain(NORMALIZE);
-    this.modulator.chain(normalizer, modIndexMult, modOffset);
+    this.normalizer = new Tone.Gain(NORMALIZE);
+    this.modulator.chain(this.normalizer, this.modIndexMult, this.modOffset);
 
     // the offset output is sent to the carrier
-    modOffset.connect(this.carrier.frequency);
+    this.modOffset.connect(this.carrier.frequency);
 
     this.amplitudeGain = new Tone.Gain();
     amplitude.connect(this.amplitudeGain.gain);
@@ -41,6 +41,16 @@ export default class {
   start() {
     this.modulator.start();
     this.carrier.connect(this.amplitudeGain).start();
-    return this.amplitudeGain;
+    this.output = this.amplitudeGain;
+    return this.output;
+  }
+
+  dispose() {
+    this.modOffset.dispose();
+    this.modIndexMult.dispose();
+    this.normalizer.dispose();
+    this.amplitudeGain.dispose();
+    this.modulator.dispose();
+    this.carrier.dispose();
   }
 }

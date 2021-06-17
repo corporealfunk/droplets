@@ -6,8 +6,10 @@ import 'purecss/build/grids-responsive.css';
 import './index.css';
 import * as Tone from 'tone';
 import FmTone from './fm_tone';
+import FmGen from './fm_gen';
 
 const button = document.getElementById('go');
+const goGen = document.getElementById('goGen');
 
 const carrierInput = document.getElementById('carrier');
 const moudulatorInput = document.getElementById('modulator');
@@ -57,6 +59,26 @@ button.addEventListener('click', async (e) => {
     carrierFreq,
     modulationIndex,
     amplitude,
+  });
+
+  newTone.start().connect(outGain);
+});
+
+goGen.addEventListener('click', async (e) => {
+  e.preventDefault();
+  await Tone.start();
+
+  const outGain = new Tone.Gain(0.8).toDestination();
+
+  const newTone = new FmGen({
+    length: 10,
+    attackRatio: 0.25,
+    sustainRatio: 0.25,
+    releaseRatio: 0.5,
+    modIndexStart: 150,
+    modIndexStop: 10,
+    modulatorFreq: 443,
+    carrierFreq: 440,
   });
 
   newTone.start().connect(outGain);

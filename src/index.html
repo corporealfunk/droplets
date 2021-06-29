@@ -11,9 +11,25 @@
       <div class="l-box tone" data-controller="tone">
         <label for='carrier'>Carrier</label>
         <input id="carrier" type="number" value=440 placeholder="carrier hz" data-tone-target="carrierHz">
+        <a href="#" data-action="tone#add" data-target="carrierHz" class="pure-button button-small">+</a>
+        <a href="#" data-action="tone#subtract" data-target="carrierHz" class="pure-button button-small">-</a>
+        <a href="#" data-action="tone#multiply" data-target="carrierHz" data-source-target="carrierHz" data-numerator="1" data-denominator="2" class="pure-button button-small">1/2</a>
+        <a href="#" data-action="tone#multiply" data-target="carrierHz" data-source-target="carrierHz" data-numerator="2" data-denominator="1" class="pure-button button-small">*2</a>
         <br>
         <label for='modulator'>Modulator</label>
         <input id="modulator" type="number" value=264 placeholder="mod hz" data-tone-target="modulatorHz">
+        <a href="#" data-action="tone#add" data-target="modulatorHz" class="pure-button button-small">+</a>
+        <a href="#" data-action="tone#subtract" data-target="modulatorHz" class="pure-button button-small">-</a>
+        <a href="#" data-action="tone#multiply" data-target="modulatorHz" data-source-target="modulatorHz" data-numerator="1" data-denominator="2" class="pure-button button-small">1/2</a>
+        <a href="#" data-action="tone#multiply" data-target="modulatorHz" data-source-target="modulatorHz" data-numerator="2" data-denominator="1" class="pure-button button-small">*2</a>
+        <br>
+        <label for='modulator'>&nbsp;</label>
+        <a href="#" data-action="tone#multiply" data-target="modulatorHz" data-source-target="carrierHz" data-numerator="4" data-denominator="3" class="pure-button button-small">4/3</a>
+        <a href="#" data-action="tone#multiply" data-target="modulatorHz" data-source-target="carrierHz" data-numerator="3" data-denominator="4" class="pure-button button-small">3/4</a>
+        <a href="#" data-action="tone#multiply" data-target="modulatorHz" data-source-target="carrierHz" data-numerator="2" data-denominator="3" class="pure-button button-small">2/3</a>
+        <a href="#" data-action="tone#multiply" data-target="modulatorHz" data-source-target="carrierHz" data-numerator="3" data-denominator="2" class="pure-button button-small">3/2</a>
+        <a href="#" data-action="tone#multiply" data-target="modulatorHz" data-source-target="carrierHz" data-numerator="5" data-denominator="3" class="pure-button button-small">5/3</a>
+        <a href="#" data-action="tone#multiply" data-target="modulatorHz" data-source-target="carrierHz" data-numerator="3" data-denominator="5" class="pure-button button-small">3/5</a>
         <br>
         <label for='modulationIndexStart'>Mod Index Start</label>
         <input id="modulationIndexStart" type="number" value=100 placeholder="mod index start" data-tone-target="modulatorIndexStart">
@@ -34,7 +50,7 @@
         <input id="sustainAmplitude" type="number" value='0.5' placeholder="sustain amp" data-tone-target="sustainAmplitude">
         <br>
         <label for='amplitude<'>Gain</label>
-        <input id="amplitude" type="number" value=100 min='0' max='127' placeholder="Amplitude<" data-tone-target="gain">
+        <input id="amplitude" type="number" value=35 min='0' max='127' placeholder="Amplitude<" data-tone-target="gain">
         <br>
         <label for='pan<'>Pan</label>
         <input id="pan" type="range" value=0 min='-10' max='10' placeholder="pan" data-tone-target="pan">

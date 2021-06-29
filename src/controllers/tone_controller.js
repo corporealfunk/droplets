@@ -80,4 +80,35 @@ export default class extends Controller {
       newTone.start().connect(outGain);
     });
   }
+
+  add(e) {
+    e.preventDefault();
+
+    const inputTarget = e.currentTarget.dataset.target;
+    const newValue = this[inputTarget] + 1;
+    this[`${inputTarget}Target`].value = newValue;
+  }
+
+  subtract(e) {
+    e.preventDefault();
+
+    const inputTarget = e.currentTarget.dataset.target;
+    const newValue = this[inputTarget] - 1;
+    this[`${inputTarget}Target`].value = newValue;
+  }
+
+  multiply(e) {
+    e.preventDefault();
+
+    const {
+      target,
+      sourceTarget,
+      numerator,
+      denominator,
+    } = e.currentTarget.dataset;
+
+    const sourceValue = this[sourceTarget];
+    const newValue = (sourceValue * parseInt(numerator, 10)) / parseInt(denominator, 10);
+    this[`${target}Target`].value = newValue;
+  }
 }

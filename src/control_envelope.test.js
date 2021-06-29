@@ -18,3 +18,13 @@ test('samples the time correctly', () => {
   }
   expect(t).toThrow('nextTime is not defined');
 });
+
+test('gets the envelope length', () => {
+  const env = new Envelope({
+    0: 0,
+    10: 10,
+    15: 11,
+  });
+
+  expect(env.length).toBe(15);
+});

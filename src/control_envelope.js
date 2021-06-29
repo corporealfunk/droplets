@@ -5,7 +5,7 @@ export default class {
   // { x1: y1, x2: y2 }
   constructor(envelope) {
     this.envelope = envelope;
-    this.times = Object.keys(envelope).sort((a, b) => a - b).map(val => parseInt(val, 10));
+    this.times = Object.keys(envelope).sort((a, b) => a - b).map((val) => parseInt(val, 10));
   }
 
   // sample the envelope at the given time (x)
@@ -25,7 +25,6 @@ export default class {
       }
 
       if (time > lastTime && time < nextTime) {
-
         const nextValue = this.envelope[nextTime];
 
         const valueDelta = nextValue - lastValue;
@@ -34,6 +33,11 @@ export default class {
 
         return ((sampleTimeDelta * valueDelta) / timeDelta) + lastValue;
       }
-    };
+    }
+    throw new Error('could not find a valid sample');
+  }
+
+  get length() {
+    return this.times[this.times.length - 1];
   }
 }

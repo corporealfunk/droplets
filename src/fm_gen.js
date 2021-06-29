@@ -26,6 +26,8 @@ export default class {
     this.amplitude = new Tone.Signal(0);
     this.modIndex = new Tone.Signal(modIndexStart);
     this.panner = new Tone.Panner(panning);
+    this.output = this.panner;
+    this.events = {};
   }
 
   start() {
@@ -55,10 +57,9 @@ export default class {
 
     setTimeout(() => {
       this.dispose();
-    }, (this.length * 1000) + 50);
+    }, (this.length * 1000));
 
     this.tone.start().connect(this.panner);
-    this.output = this.panner;
     return this.output;
   }
 
@@ -69,5 +70,28 @@ export default class {
     this.modIndex.dispose();
     this.tone.dispose();
     this.panner.dispose();
+    this.trigger('stop');
+  }
+
+  // Event system
+  on(eventName, cb) {
+    const eventArray = this.events[eventName] || [];
+    eventArray.push(cb);
+    this.events[eventName] = eventArray;
+  }
+
+  // TODO: this clears all the listeners by that name, maybe not good
+  off(eventName) {
+    delete this.events[eventName];
+  }
+
+  offAll() {
+    this.events = {};
+  }
+
+  trigger(eventName) {
+    const eventArray = this.events[eventName] || [];
+
+    eventArray.forEach((cb) => cb());
   }
 }

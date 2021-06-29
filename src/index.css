@@ -1,3 +1,8 @@
 .l-box {
   padding: 1em;
 }
+
+.tone label {
+  display: inline-block;
+  width: 30%;
+}

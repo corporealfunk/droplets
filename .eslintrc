@@ -1,5 +1,7 @@
 {
   "parser": "babel-eslint",
   "extends": ["airbnb"],
-  "rules": {}
+  "rules": {
+    "class-methods-use-this": "off",
+  }
 }

@@ -8,25 +8,38 @@
 <body>
   <div class="pure-g">
     <div class="pure-u-1 pure-u-md-1-3">
-      <div class="l-box">
+      <div class="l-box tone" data-controller="tone">
         <label for='carrier'>Carrier</label>
-        <input id="carrier" type="number" value=440 placeholder="carrier hz">
+        <input id="carrier" type="number" value=440 placeholder="carrier hz" data-tone-target="carrierHz">
         <br>
         <label for='modulator'>Modulator</label>
-        <input id="modulator" type="number" value=440 placeholder="mod hz">
+        <input id="modulator" type="number" value=264 placeholder="mod hz" data-tone-target="modulatorHz">
         <br>
-        <label for='modulationIndex'>Mod Index</label>
-        <input id="modulationIndex" type="number" value=150 placeholder="mod index">
+        <label for='modulationIndexStart'>Mod Index Start</label>
+        <input id="modulationIndexStart" type="number" value=100 placeholder="mod index start" data-tone-target="modulatorIndexStart">
         <br>
-        <label for='Amplitude<'>Amplitude</label>
-        <input id="amplitude" type="number" value=100 min='0' max='100' placeholder="Amplitude<">
+        <label for='modulationIndexStop'>Mod Index Stop</label>
+        <input id="modulationIndexStop" type="number" value=10 placeholder="mod index stop" data-tone-target="modulatorIndexStop">
         <br>
-        <a class="pure-button" id="go" href="#">GO</a>
-      </div>
-    </div>
-    <div class="pure-u-1 pure-u-md-1-3">
-      <div class="l-box">
-        <a class="pure-button" id="goGen" href="#">GOGEN</a>
+        <label for='length'>Length</label>
+        <input id="length" type="number" value=30 placeholder="length s" data-tone-target="length">
+        <br>
+        <label for='attackRatio'>Attack Ratio</label>
+        <input id="attackRatio" type="number" value='0.25' placeholder="attack ratio" data-tone-target="attackRatio">
+        <br>
+        <label for='sustainRatio'>Sustain Ratio</label>
+        <input id="sustainRatio" type="number" value='0.25' placeholder="sustain ratio" data-tone-target="sustainRatio">
+        <br>
+        <label for='sustainAmplitude'>Sustain Amplitude</label>
+        <input id="sustainAmplitude" type="number" value='0.5' placeholder="sustain amp" data-tone-target="sustainAmplitude">
+        <br>
+        <label for='amplitude<'>Gain</label>
+        <input id="amplitude" type="number" value=100 min='0' max='127' placeholder="Amplitude<" data-tone-target="gain">
+        <br>
+        <label for='pan<'>Pan</label>
+        <input id="pan" type="range" value=0 min='-10' max='10' placeholder="pan" data-tone-target="pan">
+        <br>
+        <a class="pure-button" id="go" href="#" data-action="tone#start">GO</a>
       </div>
     </div>
     <div class="pure-u-1 pure-u-md-1-3">

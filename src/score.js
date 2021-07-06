@@ -26,13 +26,18 @@ const bassSynth = () => {
     polyphony: 4,
     lengthRange: { range: [45000, 180000], step: 5 },
     gainRange: { range: [0.1, 1.0], step: 0.1 },
+    modulatorRatio: 5 / 3,
+    log: true,
   });
 };
 
 const bellSynth = () => {
   const densityEnvelope = new ControlEnvelope({
-    0: 1,
-    300000: 1,
+    0: 0,
+    60000: 0,
+    120000: 1,
+    300000: 0.5,
+    600000: 0.25,
   });
 
   const pitchSet = {
@@ -61,8 +66,12 @@ const bellSynth = () => {
 };
 
 const score = {
-  start: () => bellSynth().start(),
-  bassSynth: () => bassSynth().start(),
+  start: () => {
+    const output = new Tone.Gain(1);
+    bellSynth().start().connect(output);
+    bassSynth().start().connect(output);
+    return output;
+  },
 };
 
 export default score;

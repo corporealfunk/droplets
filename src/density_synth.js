@@ -1,5 +1,5 @@
 import * as Tone from 'tone';
-import FmGen from './fm_gen';
+import Droplet from './droplet';
 import makeNote from './make_note';
 
 export default class {
@@ -9,12 +9,12 @@ export default class {
   // polyphony: number of possible concurrent tones
   constructor({
     densityEnvelope,
-    // pitchSet,
+    pitchSet,
     // lengthRange,
     polyphony = 4,
   }) {
     this.densityEnvelope = densityEnvelope;
-    // this.pitchSet = pitchSet;
+    this.pitchSet = pitchSet;
     // this.lengthRange = lengthRange;
     this.polyphony = polyphony;
     this.slots = Array(polyphony);
@@ -88,16 +88,7 @@ export default class {
       sustainAmplitude: { range: [0.2, 0.6], step: 0.1 },
       modIndexStart: 100,
       modIndexStop: 10,
-      carrierFreq: {
-        choose: [
-          Tone.Frequency('Bb1'),
-          Tone.Frequency('C1'),
-          Tone.Frequency('Eb1'),
-          Tone.Frequency('F1'),
-          Tone.Frequency('G1'),
-          Tone.Frequency('Bb2'),
-        ],
-      },
+      carrierFreq: this.pitchSet,
       panning: { range: [-1.0, 1.0], step: 0.1 },
     });
 
@@ -105,7 +96,7 @@ export default class {
 
     console.log(genOptions);
 
-    const newTone = new FmGen(genOptions);
+    const newTone = new Droplet(genOptions);
 
     this.slotTheTone(newTone);
     newTone.on('stop', () => this.toneStopped(newTone));

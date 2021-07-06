@@ -26,8 +26,19 @@ goRun.addEventListener('click', async (e) => {
 
   const outGain = new Tone.Gain(0.3).toDestination();
 
+  const pitchSet = {
+    choose: [
+      Tone.Frequency('Bb1'),
+      Tone.Frequency('C2'),
+      Tone.Frequency('Eb2'),
+      Tone.Frequency('F2'),
+      Tone.Frequency('G2'),
+    ],
+  };
+
   const synth = new DensitySynth({
     densityEnvelope,
+    pitchSet,
     polyphony: 4,
   });
 

@@ -1,7 +1,8 @@
 import * as Tone from 'tone';
 import FmTone from './fm_tone';
+import Events from './events';
 
-export default class {
+class FmGen {
   constructor({
     length,
     attackRatio,
@@ -27,7 +28,6 @@ export default class {
     this.modIndex = new Tone.Signal(modIndexStart);
     this.panner = new Tone.Panner(panning);
     this.output = this.panner;
-    this.events = {};
   }
 
   start() {
@@ -72,26 +72,8 @@ export default class {
     this.panner.dispose();
     this.trigger('stop');
   }
-
-  // Event system
-  on(eventName, cb) {
-    const eventArray = this.events[eventName] || [];
-    eventArray.push(cb);
-    this.events[eventName] = eventArray;
-  }
-
-  // TODO: this clears all the listeners by that name, maybe not good
-  off(eventName) {
-    delete this.events[eventName];
-  }
-
-  offAll() {
-    this.events = {};
-  }
-
-  trigger(eventName) {
-    const eventArray = this.events[eventName] || [];
-
-    eventArray.forEach((cb) => cb());
-  }
 }
+
+Object.assign(FmGen.prototype, Events);
+
+export default FmGen;

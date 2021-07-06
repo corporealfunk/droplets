@@ -12,11 +12,19 @@ export default class {
     pitchSet,
     lengthRange,
     polyphony = 4,
+    gainRange,
+    tickLength = 1000,
+    modulatorRatio,
+    log = false,
   }) {
     this.densityEnvelope = densityEnvelope;
     this.pitchSet = pitchSet;
     this.lengthRange = lengthRange;
     this.polyphony = polyphony;
+    this.gainRange = gainRange;
+    this.tickLength = tickLength;
+    this.modulatorRatio = modulatorRatio;
+    this.logFlag = log;
     this.slots = Array(polyphony);
 
     for (let i = 0; i < polyphony; i += 1) {
@@ -27,22 +35,28 @@ export default class {
     this.output = new Tone.Gain(1);
   }
 
+  log(...args) {
+    if (this.logFlag) {
+      console.log(...args);
+    }
+  }
+
   start() {
-    console.log('DS::start()');
+    this.log('DS::()');
     this.startTime = Date.now();
     this.tick();
     return this.output;
   }
 
   tick() {
-    console.log('DS::tick()');
+    this.log('DS::tick()');
 
     if (this.elapsedTime < this.densityEnvelope.length) {
       this.decide();
 
       setTimeout(
         () => this.tick(),
-        1000,
+        this.tickLength,
       );
     }
   }
@@ -69,10 +83,10 @@ export default class {
 
   // returns true if a tone is started, false if not
   decide() {
-    console.log('DS::decide()');
+    this.log('DS::decide()');
     const requestedDensity = this.densityEnvelope.sample(this.elapsedTime);
 
-    console.log('  playingCount, polyphony, requestedDensity, currentDensity', this.playingCount, this.polyphony, requestedDensity, this.currentDensity);
+    this.log('  playingCount, polyphony, requestedDensity, currentDensity', this.playingCount, this.polyphony, requestedDensity, this.currentDensity);
 
     if (this.playingCount < this.polyphony && this.currentDensity < requestedDensity) {
       this.playTone();
@@ -80,7 +94,7 @@ export default class {
   }
 
   playTone() {
-    console.log('DS::playTone()');
+    this.log('DS::playTone()');
     const genOptions = makeNote({
       length: this.lengthRange,
       attackRatio: 0.25,
@@ -90,11 +104,13 @@ export default class {
       modIndexStop: 10,
       carrierFreq: this.pitchSet,
       panning: { range: [-1.0, 1.0], step: 0.1 },
+      gain: this.gainRange,
+      modulatorRatio: this.modulatorRatio,
     });
 
-    genOptions.modulatorFreq = genOptions.carrierFreq * (5 / 3);
+    genOptions.modulatorFreq = genOptions.carrierFreq * genOptions.modulatorRatio;
 
-    console.log(genOptions);
+    this.log(genOptions);
 
     const newTone = new Droplet(genOptions);
 

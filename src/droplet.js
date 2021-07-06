@@ -16,6 +16,7 @@ class Droplet {
     modulatorFreq,
     carrierFreq,
     panning,
+    gain,
   }) {
     this.mainTone = new FmGen({
       length,
@@ -27,6 +28,7 @@ class Droplet {
       modulatorFreq,
       carrierFreq,
       panning,
+      gain,
     });
 
     // Make the length shorter
@@ -51,19 +53,12 @@ class Droplet {
       modulatorFreq: modulatorFreq + rangeFrom({ range: [3, 6], step: 1 }),
       carrierFreq,
       panning,
+      gain: rangeFrom({ range: [gain / 2, gain], step: 0.05 }),
     });
 
-    this.output = new Tone.Gain(rangeFrom({
-      range: [0.2, 1.0],
-      step: 0.1,
-    }));
+    this.output = new Tone.Gain(1);
 
     this.mainTone.output.connect(this.output);
-
-    const wobbleGainValue = rangeFrom({
-      range: [0.2, 0.5],
-      step: 0.05,
-    });
 
     this.wobbleStartTime = rangeFrom({
       range: [
@@ -73,21 +68,12 @@ class Droplet {
       step: 1,
     });
 
-    this.wobbleGain = new Tone.Gain(wobbleGainValue);
-
-    console.log('wobbleGainValue', wobbleGainValue);
-
-    this.wobbleTone.output.connect(this.wobbleGain);
-
-    console.log('   wobbleStartTime:', this.wobbleStartTime / 1000);
-
-    this.wobbleGain.connect(this.output);
+    this.wobbleTone.output.connect(this.output);
 
     this.mainTone.on('stop.droplet', () => this.dispose());
   }
 
   start() {
-    console.log('Droplet::start()');
     this.mainTone.start();
 
     setTimeout(() => {
@@ -98,10 +84,8 @@ class Droplet {
   }
 
   dispose() {
-    console.log('Droplet::dispose()');
     this.mainTone.off('stop.droplet');
     this.mainTone.dispose();
-    this.wobbleGain.dispose();
     this.wobbleTone.dispose();
     this.output.dispose();
     this.trigger('stop');

@@ -1,52 +1,68 @@
 import * as Tone from 'tone';
+import ControlEnvelope from './control_envelope';
+import DensitySynth from './density_synth';
 
-const makeNote = (noteParams) => {
-  const fmGenParams = {};
-
-  Object.keys(noteParams).forEach((key) => {
-    const value = noteParams[key];
-    let param = value;
-
-    if (typeof value === 'object' && value !== null) {
-      if (value.range) {
-        const [first, last] = value.range;
-        const multiplier = 1 / value.step;
-
-        param = Math.floor(Math.random() * ((last * multiplier) - (first * multiplier)));
-        param *= value.step;
-        param += first;
-      } else if (value.choose) {
-        param = value.choose[Math.floor(Math.random() * value.choose.length)];
-      } else {
-        throw new Error('must be range or choose');
-      }
-    } else {
-      param = value;
-    }
-
-    fmGenParams[key] = param;
+const bassSynth = () => {
+  const densityEnvelope = new ControlEnvelope({
+    0: 0,
+    120000: 0.5,
+    300000: 1,
+    600000: 0.25,
   });
 
-  fmGenParams.modulatorFreq = fmGenParams.carrierFreq * (5 / 3);
+  const pitchSet = {
+    choose: [
+      Tone.Frequency('Bb1'),
+      Tone.Frequency('C2'),
+      Tone.Frequency('Eb2'),
+      Tone.Frequency('F2'),
+      Tone.Frequency('G2'),
+    ],
+  };
 
-  return fmGenParams;
+  return new DensitySynth({
+    densityEnvelope,
+    pitchSet,
+    polyphony: 4,
+    lengthRange: { range: [45000, 180000], step: 5 },
+    gainRange: { range: [0.1, 1.0], step: 0.1 },
+  });
 };
 
-const run = () => {
-  // const { currentTime } = Tone.context;
+const bellSynth = () => {
+  const densityEnvelope = new ControlEnvelope({
+    0: 1,
+    300000: 1,
+  });
 
-  const lowLongNotes = [{
-    length: { range: [30, 180], step: 10 },
-    attackRatio: 0.25,
-    sustainRatio: 0.25,
-    sustainAmplitude: { range: [0.2, 0.6], step: 0.1 },
-    modIndexStart: { range: [140, 200], step: 10 },
-    modIndexStop: 10,
-    carrierFreq: { choose: [Tone.Frequency('Bb3'), Tone.Frequency('C4'), Tone.Frequency('Eb4'), Tone.Frequency('F4')] },
-    panning: { range: [-1.0, 1.0], step: 0.1 },
-  }];
+  const pitchSet = {
+    choose: [
+      Tone.Frequency('Bb3'),
+      Tone.Frequency('C4'),
+      Tone.Frequency('Eb4'),
+      Tone.Frequency('F4'),
+      Tone.Frequency('G4'),
+      Tone.Frequency('Bb4'),
+      Tone.Frequency('C5'),
+      Tone.Frequency('Eb5'),
+      Tone.Frequency('F5'),
+    ],
+  };
 
-  return makeNote(lowLongNotes[0]);
+  return new DensitySynth({
+    densityEnvelope,
+    pitchSet,
+    polyphony: 8,
+    lengthRange: { range: [2000, 6000], step: 500 },
+    gainRange: { range: [0.1, 1.0], step: 0.1 },
+    tickLength: 100,
+    modulatorRatio: { choose: [5 / 3, 3 / 2, 4 / 3] },
+  });
 };
 
-export default run;
+const score = {
+  start: () => bellSynth().start(),
+  bassSynth: () => bassSynth().start(),
+};
+
+export default score;

@@ -15,6 +15,7 @@ class FmGen {
     modulatorFreq,
     carrierFreq,
     panning,
+    gain,
   }) {
     this.attackLength = length * attackRatio;
     this.sustainLength = length * sustainRatio;
@@ -28,10 +29,9 @@ class FmGen {
     this.modulatorFreq = new Tone.Signal(modulatorFreq);
     this.amplitude = new Tone.Signal(0);
     this.modIndex = new Tone.Signal(modIndexStart);
+    this.gain = new Tone.Gain(gain);
     this.panner = new Tone.Panner(panning);
     this.output = this.panner;
-
-    console.log('FmGen', arguments);
   }
 
   start(startTime = null) {
@@ -64,7 +64,8 @@ class FmGen {
       this.dispose();
     }, this.length);
 
-    this.tone.start(startTime).connect(this.panner);
+    this.tone.start(startTime).connect(this.gain);
+    this.gain.connect(this.panner);
     return this.output;
   }
 
@@ -75,6 +76,7 @@ class FmGen {
     this.modIndex.dispose();
     this.tone.dispose();
     this.panner.dispose();
+    this.gain.dispose();
     this.trigger('stop');
   }
 }

@@ -71,8 +71,6 @@ export default class extends Controller {
         panning: this.pan,
       };
 
-      console.log(genOptions);
-
       const outGain = new Tone.Gain(this.gain).toDestination();
 
       const newTone = new FmGen(genOptions);

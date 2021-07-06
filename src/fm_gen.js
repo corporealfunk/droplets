@@ -1,3 +1,5 @@
+/* eslint-disable prefer-rest-params */
+
 import * as Tone from 'tone';
 import FmTone from './fm_tone';
 import Events from './events';
@@ -28,12 +30,15 @@ class FmGen {
     this.modIndex = new Tone.Signal(modIndexStart);
     this.panner = new Tone.Panner(panning);
     this.output = this.panner;
+
+    console.log('FmGen', arguments);
   }
 
-  start() {
+  start(startTime = null) {
     const { currentTime } = Tone.context;
 
-    const getTimeAt = (time) => time + currentTime;
+    // time passed in is ms
+    const getTimeAt = (time) => (time / 1000) + currentTime;
 
     this.tone = new FmTone({
       modulatorFreq: this.modulatorFreq,
@@ -57,9 +62,9 @@ class FmGen {
 
     setTimeout(() => {
       this.dispose();
-    }, (this.length * 1000));
+    }, this.length);
 
-    this.tone.start().connect(this.panner);
+    this.tone.start(startTime).connect(this.panner);
     return this.output;
   }
 

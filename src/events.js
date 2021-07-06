@@ -28,7 +28,14 @@ const Events = {
 
   trigger: function (eventName) {
     this._initEvents();
-    const eventArray = this._events[eventName] || [];
+    // const eventArray = this._events[eventName] || [];
+    const eventArray = [];
+
+    Object.keys(this._events).forEach((key) => {
+      if (key.match(RegExp(`^${eventName}`))) {
+        eventArray.push(...this._events[key]);
+      }
+    });
 
     eventArray.forEach((cb) => cb());
   },

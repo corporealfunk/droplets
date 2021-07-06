@@ -1,3 +1,8 @@
+import {
+  rangeFrom,
+  chooseFrom,
+} from './value_utils';
+
 const makeNote = (noteParams) => {
   const fmGenParams = {};
 
@@ -7,14 +12,9 @@ const makeNote = (noteParams) => {
 
     if (typeof value === 'object' && value !== null) {
       if (value.range) {
-        const [first, last] = value.range;
-        const multiplier = 1 / value.step;
-
-        param = Math.floor(Math.random() * ((last * multiplier) - (first * multiplier)));
-        param *= value.step;
-        param += first;
+        param = rangeFrom(value);
       } else if (value.choose) {
-        param = value.choose[Math.floor(Math.random() * value.choose.length)];
+        param = chooseFrom(value);
       } else {
         throw new Error('must be range or choose');
       }

@@ -40,6 +40,7 @@ goRun.addEventListener('click', async (e) => {
     densityEnvelope,
     pitchSet,
     polyphony: 4,
+    lengthRange: { range: [45000, 75000], step: 5 },
   });
 
   synth.start().connect(outGain);

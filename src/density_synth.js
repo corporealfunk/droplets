@@ -5,17 +5,17 @@ import makeNote from './make_note';
 export default class {
   // densityEnvelope is a ControlEnvelope defined in ms
   // pitchSet: array of hz
-  // lengthRange: array of two ints, defining shortest, longest note in seconds
+  // lengthRange: array of two ints, defining shortest, longest note in ms
   // polyphony: number of possible concurrent tones
   constructor({
     densityEnvelope,
     pitchSet,
-    // lengthRange,
+    lengthRange,
     polyphony = 4,
   }) {
     this.densityEnvelope = densityEnvelope;
     this.pitchSet = pitchSet;
-    // this.lengthRange = lengthRange;
+    this.lengthRange = lengthRange;
     this.polyphony = polyphony;
     this.slots = Array(polyphony);
 
@@ -82,7 +82,7 @@ export default class {
   playTone() {
     console.log('DS::playTone()');
     const genOptions = makeNote({
-      length: { range: [45, 75], step: 5 },
+      length: this.lengthRange,
       attackRatio: 0.25,
       sustainRatio: 0.25,
       sustainAmplitude: { range: [0.2, 0.6], step: 0.1 },

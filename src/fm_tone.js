@@ -38,9 +38,9 @@ export default class {
     amplitude.connect(this.amplitudeGain.gain);
   }
 
-  start() {
-    this.modulator.start();
-    this.carrier.connect(this.amplitudeGain).start();
+  start(startTime = null) {
+    this.modulator.start(startTime);
+    this.carrier.connect(this.amplitudeGain).start(startTime);
     this.output = this.amplitudeGain;
     return this.output;
   }

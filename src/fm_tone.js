@@ -36,12 +36,15 @@ export default class {
 
     this.amplitudeGain = new Tone.Gain();
     amplitude.connect(this.amplitudeGain.gain);
+
+    this.carrier.connect(this.amplitudeGain);
+    this.output = this.amplitudeGain;
   }
 
   start(startTime = null) {
     this.modulator.start(startTime);
-    this.carrier.connect(this.amplitudeGain).start(startTime);
-    this.output = this.amplitudeGain;
+    this.carrier.start(startTime);
+
     return this.output;
   }
 

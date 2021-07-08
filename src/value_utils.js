@@ -11,7 +11,11 @@ const rangeFrom = ({ range, step }) => {
 };
 
 const chooseFrom = ({ choose }) => choose[Math.floor(Math.random() * choose.length)];
+
+const minimum = (value, minVal) => (value < minVal ? minVal : value);
+
 export {
   rangeFrom,
   chooseFrom,
+  minimum,
 };

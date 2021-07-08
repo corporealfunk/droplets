@@ -6,7 +6,19 @@ import {
 } from './value_utils';
 
 class Droplet {
-  constructor({
+  constructor() {
+    this.mainTone = new FmGen();
+    this.wobbleTone = new FmGen();
+
+    this.output = new Tone.Gain(1);
+
+    this.mainTone.output.connect(this.output);
+    this.wobbleTone.output.connect(this.output);
+
+    this.mainTone.on('stop.droplet', () => this.stop());
+  }
+
+  setNote({
     length,
     attackRatio,
     sustainRatio,
@@ -18,7 +30,7 @@ class Droplet {
     panning,
     gain,
   }) {
-    this.mainTone = new FmGen({
+    this.mainTone.setNote({
       length,
       attackRatio,
       sustainRatio,
@@ -43,7 +55,7 @@ class Droplet {
     const wobbleLength = length * shortenBy;
     const lengthDelta = length - wobbleLength;
 
-    this.wobbleTone = new FmGen({
+    this.wobbleTone.setNote({
       length: wobbleLength,
       attackRatio: rangeFrom({ range: [0.01, 0.05], step: 0.01 }),
       sustainRatio: 0.25,
@@ -56,10 +68,6 @@ class Droplet {
       gain: rangeFrom({ range: [gain / 2, gain], step: 0.05 }),
     });
 
-    this.output = new Tone.Gain(1);
-
-    this.mainTone.output.connect(this.output);
-
     this.wobbleStartTime = rangeFrom({
       range: [
         0,
@@ -68,9 +76,7 @@ class Droplet {
       step: 1,
     });
 
-    this.wobbleTone.output.connect(this.output);
-
-    this.mainTone.on('stop.droplet', () => this.dispose());
+    return this;
   }
 
   start() {
@@ -83,12 +89,19 @@ class Droplet {
     return this.output;
   }
 
+  get playing() {
+    return this.wobbleTone.playing || this.mainTone.playing;
+  }
+
+  stop() {
+    this.trigger('stop');
+  }
+
   dispose() {
     this.mainTone.off('stop.droplet');
     this.mainTone.dispose();
     this.wobbleTone.dispose();
     this.output.dispose();
-    this.trigger('stop');
   }
 }
 

@@ -27,12 +27,14 @@ export default class {
     this.logFlag = log;
     this.slots = Array(polyphony);
 
+    this.output = new Tone.Gain(1);
+
     for (let i = 0; i < polyphony; i += 1) {
-      this.slots[i] = null;
+      this.slots[i] = new Droplet();
+      this.slots[i].output.connect(this.output);
     }
 
     this.startTime = null;
-    this.output = new Tone.Gain(1);
   }
 
   log(...args) {
@@ -69,7 +71,7 @@ export default class {
   get playingCount() {
     let count = 0;
     this.slots.forEach((tone) => {
-      if (tone) {
+      if (tone.playing) {
         count += 1;
       }
     });
@@ -110,46 +112,28 @@ export default class {
 
     genOptions.modulatorFreq = genOptions.carrierFreq * genOptions.modulatorRatio;
 
+    const freeTone = this.getFreeTone();
     this.log(genOptions);
-
-    const newTone = new Droplet(genOptions);
-
-    this.slotTheTone(newTone);
-    newTone.on('stop', () => this.toneStopped(newTone));
-
-    newTone.start().connect(this.output);
+    freeTone.setNote(genOptions).start();
   }
 
   // returns index of inserted tone
-  slotTheTone(tone) {
-    const availableI = this.slots.indexOf(null);
+  getFreeTone() {
+    this.log('DensitySynth::getFreeTone()');
+    let freeTone = null;
 
-    if (availableI < 0) {
-      throw new Error('Cannot insert tone, no availble slots');
+    for (let i = 0; i < this.slots.length; i += 1) {
+      if (!this.slots[i].playing) {
+        this.log('            :: slot', i);
+        freeTone = this.slots[i];
+        break;
+      }
     }
 
-    this.slots[availableI] = tone;
-
-    return availableI;
-  }
-
-  releaseSlot(i) {
-    this.slots[i] = null;
-  }
-
-  // the tone is stopped:
-  // - remove observers
-  // - delete it
-  // - delete from slots
-  toneStopped(tone) {
-    const i = this.slots.indexOf(tone);
-
-    if (i < 0) {
-      throw new Error('Cannot find stopped tone in slots');
+    if (freeTone === null) {
+      throw new Error('Cannot play tone, all slots playing');
     }
 
-    tone.offAll();
-
-    this.releaseSlot(i);
+    return freeTone;
   }
 }

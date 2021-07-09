@@ -48,6 +48,15 @@ export default class {
     return this.output;
   }
 
+  stop(stopTime = null) {
+    this.modulator.stop(stopTime);
+    this.carrier.stop(stopTime);
+  }
+
+  get playing() {
+    return this.modulator.state === 'started' || this.carrier.state === 'started';
+  }
+
   dispose() {
     this.modOffset.dispose();
     this.modIndexMult.dispose();

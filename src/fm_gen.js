@@ -43,7 +43,7 @@ class FmGen {
     this.amplitude.value = 0;
     this.attackLength = length * attackRatio;
 
-    this.attackLength = minimum(this.attackLength, 75);
+    this.attackLength = minimum(this.attackLength, 100);
 
     this.sustainLength = length * sustainRatio;
     this.sustainAmplitude = sustainAmplitude;
@@ -61,11 +61,23 @@ class FmGen {
     return this;
   }
 
+  // startTime is ms in the future that you want to start playing
+  // Optional.
   start(startTime = null) {
     const { currentTime } = Tone.context;
 
     // time passed in is ms
-    const getTimeAt = (time) => (time / 1000) + currentTime;
+    const getTimeAt = (time) => {
+      let absTime = (time / 1000) + currentTime;
+
+      if (startTime !== null) {
+        absTime += (startTime / 1000);
+      }
+
+      return absTime;
+    };
+
+    this.tone.start(getTimeAt(0));
 
     // schedule the amplitude envelope:
     this.amplitude.setValueAtTime(0, getTimeAt(0));
@@ -81,20 +93,18 @@ class FmGen {
     this.modIndex.setValueAtTime(this.modIndexStart, getTimeAt(0));
     this.modIndex.linearRampToValueAtTime(this.modIndexStop, getTimeAt(this.length));
 
-    this.tone.start(startTime);
-
-    this.playing = true;
-
-    setTimeout(() => {
-      this.stop();
-    }, this.length);
+    // schedule when to stop
+    this.stop(getTimeAt(this.length));
 
     return this.output;
   }
 
-  stop() {
-    this.playing = false;
-    this.trigger('stop');
+  get playing() {
+    return this.tone.playing;
+  }
+
+  stop(stopTime = null) {
+    this.tone.stop(stopTime);
   }
 
   dispose() {

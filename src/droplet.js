@@ -14,8 +14,6 @@ class Droplet {
 
     this.mainTone.output.connect(this.output);
     this.wobbleTone.output.connect(this.output);
-
-    this.mainTone.on('stop.droplet', () => this.stop());
   }
 
   setNote({
@@ -82,9 +80,12 @@ class Droplet {
   start() {
     this.mainTone.start();
 
-    setTimeout(() => {
-      this.wobbleTone.start();
-    }, this.wobbleStartTime);
+    const { currentTime } = Tone.context;
+
+    // time passed in is ms
+    const getTimeAt = (time) => (time / 1000) + currentTime;
+
+    this.wobbleTone.start(getTimeAt(this.wobbleStartTime));
 
     return this.output;
   }
@@ -93,12 +94,12 @@ class Droplet {
     return this.wobbleTone.playing || this.mainTone.playing;
   }
 
-  stop() {
-    this.trigger('stop');
+  stop(stopTime = null) {
+    this.mainTone.stop(stopTime);
+    this.wobbleTone.stop(stopTime);
   }
 
   dispose() {
-    this.mainTone.off('stop.droplet');
     this.mainTone.dispose();
     this.wobbleTone.dispose();
     this.output.dispose();

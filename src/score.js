@@ -4,7 +4,7 @@ import DensitySynth from './density_synth';
 
 const bassSynth = () => {
   const densityEnvelope = new ControlEnvelope({
-    0: 0,
+    0: 0.25,
     600000: 0.5,
     1200000: 1,
     1800000: 0.25,
@@ -28,6 +28,8 @@ const bassSynth = () => {
     gainRange: { range: [0.3, 1.0], step: 0.1 },
     modulatorRatio: 5 / 3,
     modulatorWobbleRange: { range: [4, 7], step: 1 },
+    carrierWobbleRange: { range: [0, 0], step: 1 },
+    tickLength: 5000,
     log: false,
   });
 };
@@ -62,14 +64,15 @@ const bellSynth = () => {
     gainRange: { range: [0.1, 0.7], step: 0.05 },
     tickLength: 100,
     modulatorRatio: { choose: [5 / 3, 3 / 2, 4 / 3] },
-    modulatorWobbleRange: { range: [3, 6], step: 0.5 },
+    modulatorWobbleRange: { range: [0, 0], step: 1 },
+    carrierWobbleRange: { range: [4, 7], step: 1 },
     log: false,
   });
 };
 
 const hiSynth = () => {
   const densityEnvelope = new ControlEnvelope({
-    0: 0,
+    0: 1,
     900000: 0,
     1500000: 1,
   });
@@ -103,15 +106,18 @@ const hiSynth = () => {
   return new DensitySynth({
     densityEnvelope,
     pitchSet,
-    polyphony: 8,
+    polyphony: 1,
     lengthRange: { range: [2000, 4000], step: 100 },
     gainRange: { range: [0.1, 0.6], step: 0.05 },
     tickLength: 100,
     modulatorRatio: { choose: [10 / 3, 8 / 3] },
-    modulatorWobbleRange: { range: [3, 7], step: 0.5 },
+    modulatorWobbleRange: { range: [0, 0], step: 1 },
+    carrierWobbleRange: { range: [4, 7], step: 1 },
     log: false,
   });
 };
+
+console.log(bassSynth, bellSynth, hiSynth);
 
 const score = {
   start: () => {

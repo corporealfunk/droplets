@@ -17,6 +17,7 @@ export default class {
     tickLength = 1000,
     modulatorRatio,
     modulatorWobbleRange,
+    carrierWobbleRange,
     log = false,
   }) {
     this.densityEnvelope = densityEnvelope;
@@ -27,6 +28,7 @@ export default class {
     this.tickLength = tickLength;
     this.modulatorRatio = modulatorRatio;
     this.modulatorWobbleRange = modulatorWobbleRange;
+    this.carrierWobbleRange = carrierWobbleRange;
     this.logFlag = log;
     this.slots = Array(polyphony);
 
@@ -85,6 +87,17 @@ export default class {
     return count;
   }
 
+  get playingOrScheduledCount() {
+    let count = 0;
+    this.slots.forEach((slot) => {
+      if (slot.tone.scheduled || slot.tone.playing) {
+        count += 1;
+      }
+    });
+
+    return count;
+  }
+
   decide() {
     this.log('DensitySynth::decide()');
     const requestedDensity = this.densityEnvelope.sample(this.elapsedTime);
@@ -112,6 +125,7 @@ export default class {
         gain: this.gainRange,
         modulatorRatio: this.modulatorRatio,
         modulatorWobble: this.modulatorWobbleRange,
+        carrierWobble: this.carrierWobbleRange,
       });
 
       genOptions.modulatorFreq = genOptions.carrierFreq * genOptions.modulatorRatio;
@@ -136,11 +150,9 @@ export default class {
           tone.setNote(genOptions).start();
         }
       } else {
-        // use vertical polyphony here for the first note, start it in the future,
-        // by random division of the length of the note so they don't all start
-        // at the same time
-        this.log('            ::first note decide, slot, vertDensity, requestedDensity', this.playingCount / this.polyphony, requestedDensity);
-        if ((this.playingCount / this.polyphony) < requestedDensity) {
+        const currentDensity = ((this.playingOrScheduledCount) / this.polyphony);
+        this.log('            ::first note decide, slot, vertDensity, requestedDensity', currentDensity, requestedDensity);
+        if (currentDensity < requestedDensity) {
           this.slots[i].lastNote = genOptions;
           const startOffset = (i === 0) ? 0 : genOptions.length / rangeFrom({
             range: [2, 5],

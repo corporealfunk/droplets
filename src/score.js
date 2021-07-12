@@ -72,7 +72,7 @@ const bellSynth = () => {
 
 const hiSynth = () => {
   const densityEnvelope = new ControlEnvelope({
-    0: 1,
+    0: 0,
     900000: 0,
     1500000: 1,
   });

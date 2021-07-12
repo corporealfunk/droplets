@@ -30,8 +30,11 @@ export default class {
     this.output = new Tone.Gain(1);
 
     for (let i = 0; i < polyphony; i += 1) {
-      this.slots[i] = new Droplet();
-      this.slots[i].output.connect(this.output);
+      this.slots[i] = {
+        tone: new Droplet(),
+        lastNote: {},
+      };
+      this.slots[i].tone.output.connect(this.output);
     }
 
     this.startTime = null;
@@ -70,8 +73,8 @@ export default class {
 
   get playingCount() {
     let count = 0;
-    this.slots.forEach((tone) => {
-      if (tone.playing) {
+    this.slots.forEach((slot) => {
+      if (slot.tone.playing) {
         count += 1;
       }
     });
@@ -83,39 +86,16 @@ export default class {
     this.log('DensitySynth::decide()');
     const requestedDensity = this.densityEnvelope.sample(this.elapsedTime);
 
-    this.log('            ::playingCount, polyphony, requestedDensity, currentDensity', this.playingCount, this.polyphony, requestedDensity);
-    /*
-    // we are less then the requested density and we have polyphony available.
-    // should we play? if we do play a tone what would the density become?
-    const futureDensity = (this.playingCount + 1) / this.polyphony;
-
-    // what multiple of the requeted density is this?
-    const futureDensityMultiple = futureDensity / requestedDensity;
-
-    // multiply by 100 and round up to get the chance that we should play:
-    const playChancePercent = Math.ceil((1 / futureDensityMultiple) * 100);
-
-    // roll the dice if we hit it, play the tone:
-    if (Math.ceil(Math.random() * 100) <= playChancePercent) {
-    this.playTone();
-    }
-    */
-
-    // for each slot that is not playing, we need to schedule the next
-    // note in such a way that from the beginning of the last note to the
-    // end of the next note, we've been playing for the requested density as a %
-    // over that time span, so we might need to schedule the next note far in the future,
-    // or maybe right now
+    // for each slot: if we schedule the next not NOW, will we meet
+    // the requestedDensity within a reasonable margin?
     for (let i = 0; i < this.slots.length; i += 1) {
-      const tone = this.slots[i];
-      this.log('            ::isScheduled, playing, requestedDensity', tone.scheduled, tone.playing, requestedDensity);
+      const { tone, lastNote } = this.slots[i];
+      this.log('    :slot', i);
 
       if (tone.scheduled || tone.playing || requestedDensity === 0) {
         break;
       }
 
-      // tone is not playing nor scheduled. Let's schedule a tone to meet our
-      // requestedDensity:
       const genOptions = makeNote({
         length: this.lengthRange,
         attackRatio: 0.25,
@@ -131,43 +111,35 @@ export default class {
 
       genOptions.modulatorFreq = genOptions.carrierFreq * genOptions.modulatorRatio;
 
-      let scheduleIn = 0;
-
-      const lastLength = tone.length; // might be null if never played before!
+      const lastLength = lastNote.length; // might be null if never played before!
       const nextLength = genOptions.length; // might be null if never played before!
 
-      if (lastLength !== null) {
-        // to figure out in how many ms to schedule the tone:
+      this.log('            ::lastLength', lastLength);
+      if (lastLength !== null && lastLength !== undefined) {
         const { msSinceStopped } = tone;
 
-        scheduleIn = (
-          (lastLength + nextLength)
-          - (requestedDensity * msSinceStopped)
-          - (requestedDensity * lastLength)
-          - (requestedDensity * nextLength)
-        ) / requestedDensity;
+        this.log('            ::msSinceStopped', msSinceStopped);
 
-        scheduleIn = scheduleIn > 0 ? scheduleIn : 0;
+        // if we play now the density will be:
+        const density = (lastLength + nextLength) / (msSinceStopped + lastLength + nextLength);
 
-        console.log(
-          't1, t2, (total sound), msSinceStopped, scheduleIn, (total silence), totalLength, density check, requestedDensity',
-          lastLength,
-          nextLength,
-          lastLength + nextLength,
-          msSinceStopped,
-          scheduleIn,
-          scheduleIn + msSinceStopped,
-          lastLength + nextLength + msSinceStopped + scheduleIn,
-          (lastLength + nextLength) / (lastLength + nextLength + msSinceStopped + scheduleIn),
-          requestedDensity,
-        );
+        // if we are less then the requested density, then play the note:
+        this.log('            ::density, requestedDensity', density, requestedDensity);
+        if (density < requestedDensity) {
+          this.log('            ::Play');
+          this.slots[i].lastNote = genOptions;
+          tone.setNote(genOptions).start();
+        }
+      } else {
+        // use vertical polyphony here for the first note:
+        this.log('            ::first note decide, slot, vertDensity, requestedDensity', this.playingCount / this.polyphony, requestedDensity);
+        if ((this.playingCount / this.polyphony) < requestedDensity) {
+          this.log('            ::Play First Note on slot', i);
+          this.slots[i].lastNote = genOptions;
+          tone.setNote(genOptions).start();
+          this.log('            ::Play First Note on slot', i);
+        }
       }
-
-      scheduleIn = scheduleIn < 0 ? 0 : Math.ceil(scheduleIn);
-
-      this.log(genOptions, scheduleIn);
-
-      tone.setNote(genOptions).start(scheduleIn);
     }
   }
 }

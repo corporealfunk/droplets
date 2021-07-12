@@ -97,7 +97,7 @@ class FmGen {
 
     // schedule the modIndex envelope:
     this.modIndex.setValueAtTime(this.modIndexStart, getTimeAt(0));
-    this.modIndex.linearRampToValueAtTime(this.modIndexStop, getTimeAt(this.length));
+    this.modIndex.exponentialRampToValueAtTime(this.modIndexStop, getTimeAt(this.length));
 
     // schedule when to stop
     this.stop(getTimeAt(this.length));

@@ -77,21 +77,42 @@ class Droplet {
     return this;
   }
 
-  start() {
-    this.mainTone.start();
-
-    const { currentTime } = Tone.context;
-
-    // time passed in is ms
-    const getTimeAt = (time) => (time / 1000) + currentTime;
-
-    this.wobbleTone.start(getTimeAt(this.wobbleStartTime));
+  // startTime is ms in the future that you want to start playing
+  start(startTime = null) {
+    this.mainTone.start(startTime);
+    this.wobbleTone.start((startTime || 0) + this.wobbleStartTime);
 
     return this.output;
   }
 
   get playing() {
     return this.wobbleTone.playing || this.mainTone.playing;
+  }
+
+  get length() {
+    return this.mainTone.length;
+  }
+
+  get scheduled() {
+    return this.mainTone.scheduled || this.wobbleTone.scheduled;
+  }
+
+  get msSinceStopped() {
+    // still playing, return 0
+    if (this.playing) {
+      return 0;
+    }
+
+    const mainElapsed = this.mainTone.msSinceStopped;
+    const wobbleElapsed = this.wobbleTone.msSinceStopped;
+
+    // one of them never started and then stopped
+    if (mainElapsed === -1 || wobbleElapsed === -1) {
+      return -1;
+    }
+
+    // return whichever has a shorter elapsed time
+    return Math.min(mainElapsed, wobbleElapsed);
   }
 
   stop(stopTime = null) {

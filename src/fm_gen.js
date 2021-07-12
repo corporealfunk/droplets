@@ -8,6 +8,10 @@ import { minimum } from './value_utils';
 
 class FmGen {
   constructor() {
+    this.startedAt = null;
+    this.stoppedAt = null;
+    this.length = null;
+
     this.carrierFreq = new Tone.Signal(0);
     this.modulatorFreq = new Tone.Signal(0);
     this.amplitude = new Tone.Signal(0);
@@ -62,7 +66,7 @@ class FmGen {
   }
 
   // startTime is ms in the future that you want to start playing
-  // Optional.
+  // null means "now"
   start(startTime = null) {
     const { currentTime } = Tone.context;
 
@@ -76,6 +80,8 @@ class FmGen {
 
       return absTime;
     };
+
+    this.startedAt = getTimeAt(0);
 
     this.tone.start(getTimeAt(0));
 
@@ -99,12 +105,35 @@ class FmGen {
     return this.output;
   }
 
+  get scheduled() {
+    if (this.startedAt === null) {
+      return false;
+    }
+
+    return this.startedAt > Tone.context.currentTime;
+  }
+
   get playing() {
     return this.tone.playing;
   }
 
+  // how many ms have passed since we last stopped?
+  get msSinceStopped() {
+    if (this.playing) {
+      return 0;
+    }
+
+    if (this.stoppedAt === 0) {
+      return -1;
+    }
+
+    return (Tone.context.currentTime - this.stoppedAt) * 1000;
+  }
+
+  // stopTime is absolute clock time, or null for "now"
   stop(stopTime = null) {
     this.tone.stop(stopTime);
+    this.stoppedAt = stopTime !== null ? stopTime : Tone.context.currentTime;
   }
 
   dispose() {

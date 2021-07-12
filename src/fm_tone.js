@@ -48,6 +48,7 @@ export default class {
     return this.output;
   }
 
+  // stopTime is absolute clock time
   stop(stopTime = null) {
     this.modulator.stop(stopTime);
     this.carrier.stop(stopTime);

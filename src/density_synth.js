@@ -1,6 +1,7 @@
 import * as Tone from 'tone';
 import Droplet from './droplet';
 import makeNote from './make_note';
+import { rangeFrom } from './value_utils';
 
 export default class {
   // densityEnvelope is a ControlEnvelope defined in ms
@@ -15,6 +16,7 @@ export default class {
     gainRange,
     tickLength = 1000,
     modulatorRatio,
+    modulatorWobbleRange,
     log = false,
   }) {
     this.densityEnvelope = densityEnvelope;
@@ -24,6 +26,7 @@ export default class {
     this.gainRange = gainRange;
     this.tickLength = tickLength;
     this.modulatorRatio = modulatorRatio;
+    this.modulatorWobbleRange = modulatorWobbleRange;
     this.logFlag = log;
     this.slots = Array(polyphony);
 
@@ -90,10 +93,11 @@ export default class {
     // the requestedDensity within a reasonable margin?
     for (let i = 0; i < this.slots.length; i += 1) {
       const { tone, lastNote } = this.slots[i];
-      this.log('    :slot', i);
+      this.log('    ::slot x of i', i, this.slots.length);
 
       if (tone.scheduled || tone.playing || requestedDensity === 0) {
-        break;
+        this.log('    ::   continue', i);
+        continue; // eslint-disable-line no-continue
       }
 
       const genOptions = makeNote({
@@ -107,6 +111,7 @@ export default class {
         panning: { range: [-1.0, 1.0], step: 0.1 },
         gain: this.gainRange,
         modulatorRatio: this.modulatorRatio,
+        modulatorWobble: this.modulatorWobbleRange,
       });
 
       genOptions.modulatorFreq = genOptions.carrierFreq * genOptions.modulatorRatio;
@@ -131,13 +136,19 @@ export default class {
           tone.setNote(genOptions).start();
         }
       } else {
-        // use vertical polyphony here for the first note:
+        // use vertical polyphony here for the first note, start it in the future,
+        // by random division of the length of the note so they don't all start
+        // at the same time
         this.log('            ::first note decide, slot, vertDensity, requestedDensity', this.playingCount / this.polyphony, requestedDensity);
         if ((this.playingCount / this.polyphony) < requestedDensity) {
-          this.log('            ::Play First Note on slot', i);
           this.slots[i].lastNote = genOptions;
-          tone.setNote(genOptions).start();
-          this.log('            ::Play First Note on slot', i);
+          const startOffset = (i === 0) ? 0 : genOptions.length / rangeFrom({
+            range: [2, 5],
+            step: 1,
+          });
+
+          tone.setNote(genOptions).start(startOffset);
+          this.log('            ::Play First Note on slot, offset', i, startOffset);
         }
       }
     }

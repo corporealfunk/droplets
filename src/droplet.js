@@ -24,6 +24,7 @@ class Droplet {
     modIndexStart,
     modIndexStop,
     modulatorFreq,
+    modulatorWobble,
     carrierFreq,
     panning,
     gain,
@@ -60,8 +61,8 @@ class Droplet {
       sustainAmplitude: rangeFrom({ range: [0.3, 0.6], step: 0.1 }),
       modIndexStart,
       modIndexStop,
-      modulatorFreq: modulatorFreq + rangeFrom({ range: [3, 6], step: 1 }),
-      carrierFreq,
+      modulatorFreq,
+      carrierFreq: carrierFreq + modulatorWobble,
       panning,
       gain: rangeFrom({ range: [gain / 2, gain], step: 0.05 }),
     });

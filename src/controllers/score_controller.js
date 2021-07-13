@@ -5,13 +5,6 @@ import score from '../score';
 export default class extends Controller {
   static targets = ['start', 'synthList'];
 
-  initialize() {
-    Tone.start().then(() => {
-      this.outGain = new Tone.Gain(0.3).toDestination();
-      this.startTarget.classList.remove('pure-button-disabled');
-    });
-  }
-
   connect() {
     score.synths.forEach((synth, i) => {
       this.synthListTarget.insertAdjacentHTML(
@@ -28,6 +21,11 @@ export default class extends Controller {
 
   start(e) {
     e.preventDefault();
-    score.start().connect(this.outGain);
+
+    Tone.start().then(() => {
+      this.outGain = new Tone.Gain(0.3).toDestination();
+      e.preventDefault();
+      score.start().connect(this.outGain);
+    });
   }
 }

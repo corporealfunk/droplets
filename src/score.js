@@ -109,7 +109,7 @@ const hiSynth = () => {
   return new DensitySynth({
     densityEnvelope,
     pitchSet,
-    polyphony: 1,
+    polyphony: 8,
     lengthRange: { range: [2000, 4000], step: 100 },
     gainRange: { range: [0.1, 0.6], step: 0.05 },
     tickLength: 100,

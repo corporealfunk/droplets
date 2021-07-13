@@ -40,7 +40,8 @@ class FmGen {
     modIndexStart,
     modIndexStop,
     modulatorFreq,
-    carrierFreq,
+    carrierFreqStart,
+    carrierFreqStop,
     panning,
     gain,
   }) {
@@ -56,7 +57,10 @@ class FmGen {
     this.modIndexStart = modIndexStart;
     this.modIndexStop = modIndexStop;
 
-    this.carrierFreq.value = carrierFreq;
+    this.carrierFreq.value = carrierFreqStart;
+    this.carrierFreqStart = carrierFreqStart;
+    this.carrierFreqStop = carrierFreqStop;
+
     this.modulatorFreq.value = modulatorFreq;
     this.modIndex.value = modIndexStart;
     this.gain.gain.value = gain;
@@ -93,11 +97,15 @@ class FmGen {
       this.sustainAmplitude,
       getTimeAt(this.attackLength + this.sustainLength),
     );
-    this.amplitude.linearRampToValueAtTime(0, getTimeAt(this.length));
+    this.amplitude.exponentialRampToValueAtTime(0, getTimeAt(this.length));
 
-    // schedule the modIndex envelope:
+    // schedule the carrierFrequency envelope:
     this.modIndex.setValueAtTime(this.modIndexStart, getTimeAt(0));
-    this.modIndex.exponentialRampToValueAtTime(this.modIndexStop, getTimeAt(this.length));
+    this.modIndex.linearRampToValueAtTime(this.modIndexStop, getTimeAt(this.length));
+
+    // schedule the carrierFrequency envelope:
+    this.carrierFreq.setValueAtTime(this.carrierFreqStart, getTimeAt(0));
+    this.carrierFreq.exponentialRampTo(this.carrierFreqStop, getTimeAt(this.length));
 
     // schedule when to stop
     this.stop(getTimeAt(this.length));

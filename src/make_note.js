@@ -25,6 +25,20 @@ const makeNote = (noteParams) => {
     fmGenParams[key] = param;
   });
 
+  // key "carrierFreq" is special, it might have an array of values.
+  // if so, we're going to slide from first to last, else, just
+  // use the the value
+  if (Array.isArray(fmGenParams.carrierFreq)) {
+    // eslint-disable-next-line prefer-destructuring
+    fmGenParams.carrierFreqStart = fmGenParams.carrierFreq[0];
+    fmGenParams.carrierFreqStop = fmGenParams.carrierFreq[fmGenParams.carrierFreq.length - 1];
+  } else {
+    fmGenParams.carrierFreqStart = fmGenParams.carrierFreq;
+    fmGenParams.carrierFreqStop = fmGenParams.carrierFreq;
+  }
+
+  delete fmGenParams.carrierFreq;
+
   return fmGenParams;
 };
 

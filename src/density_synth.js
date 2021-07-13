@@ -146,7 +146,7 @@ class DensitySynth {
         carrierWobble: this.carrierWobbleRange,
       });
 
-      genOptions.modulatorFreq = genOptions.carrierFreq * genOptions.modulatorRatio;
+      genOptions.modulatorFreq = genOptions.carrierFreqStart * genOptions.modulatorRatio;
 
       const lastLength = lastNote.length; // might be null if never played before!
       const nextLength = genOptions.length; // might be null if never played before!

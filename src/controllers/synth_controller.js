@@ -38,7 +38,6 @@ export default class extends Controller {
         `;
       });
       this.statsTarget.innerHTML = HTML;
-      console.log(this.statsTarget.innerHTML);
       this.lastStatsPrint = Date.now();
     }
   }
@@ -46,7 +45,7 @@ export default class extends Controller {
   printPlay({ slot, genOptions, startOffset = 0 }) {
     if (startOffset === 0) {
       this.slotTargets[slot].innerHTML = `
-      note: ${genOptions.carrierFreq.valueOf().toFixed(2)} for ${genOptions.length} ms
+      note: ${genOptions.carrierFreqStart.valueOf().toFixed(2)} for ${genOptions.length} ms
       `;
 
       setTimeout(

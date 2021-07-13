@@ -25,9 +25,15 @@ export default class extends Controller {
     e.currentTarget.classList.add('pure-button-disabled');
 
     Tone.start().then(() => {
-      this.outGain = new Tone.Gain(0.3).toDestination();
+      const reverb = new Tone.Reverb({
+        delay: 3,
+        preDelay: 0.1,
+        wet: 0.4,
+      }).toDestination();
+      const outGain = new Tone.Gain(0.5);
+      outGain.connect(reverb);
       e.preventDefault();
-      score.start().connect(this.outGain);
+      score.start().connect(outGain);
       this.startTime = Date.now();
       this.setTimer();
     });

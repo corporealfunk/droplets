@@ -17,7 +17,7 @@ export default class extends Controller {
     for (let i = 0; i < this.synth.polyphony; i += 1) {
       this.slotListTarget.insertAdjacentHTML(
         'beforeend',
-        `<li data-synth-target='slot'>-</li>`,
+        '<li data-synth-target="slot">-</li>',
       );
     }
 
@@ -45,7 +45,6 @@ export default class extends Controller {
 
   printPlay({ slot, genOptions }) {
     this.statsTarget.innerHTML = '';
-    const stats = this.synth.stats();
 
     this.slotTargets[slot].innerHTML = `
       note: ${genOptions.carrierFreq.valueOf().toFixed(2)} for ${genOptions.length} ms

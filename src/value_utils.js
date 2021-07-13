@@ -28,6 +28,9 @@ const prettyPrintMs = (ms) => {
   return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
 };
 
+const quarterTone = 1.00057778950655 ** 50;
+const eighthTone = 1.00057778950655 ** 25;
+
 export {
   rangeFrom,
   chooseFrom,
@@ -35,4 +38,6 @@ export {
   minsToMs,
   secondsToMs,
   prettyPrintMs,
+  quarterTone,
+  eighthTone,
 };

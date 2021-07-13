@@ -5,7 +5,7 @@ import { minsToMs } from './value_utils';
 
 const bassSynth = () => {
   const densityEnvelope = new ControlEnvelope({
-    0: 0.5,
+    0: 0.4,
     [minsToMs(10)]: 0.75,
     [minsToMs(20)]: 1,
     [minsToMs(30)]: 0.25,
@@ -26,6 +26,7 @@ const bassSynth = () => {
     pitchSet,
     polyphony: 4,
     lengthRange: { range: [120000, 240000], step: 10000 },
+    sustainRatioRange: { range: [0.4, 0.6], step: 0.05 },
     gainRange: { range: [0.3, 1.0], step: 0.1 },
     modulatorRatio: 5 / 3,
     modulatorWobbleRange: { range: [4, 7], step: 1 },
@@ -63,6 +64,7 @@ const bellSynth = () => {
     pitchSet,
     polyphony: 8,
     lengthRange: { range: [6000, 30000], step: 1000 },
+    sustainRatioRange: { range: [0.25, 0.5], step: 0.05 },
     gainRange: { range: [0.1, 0.7], step: 0.05 },
     tickLength: 100,
     modulatorRatio: { choose: [5 / 3, 3 / 2, 4 / 3] },
@@ -111,6 +113,7 @@ const hiSynth = () => {
     pitchSet,
     polyphony: 8,
     lengthRange: { range: [2000, 4000], step: 100 },
+    sustainRatioRange: { range: [0.25, 0.5], step: 0.05 },
     gainRange: { range: [0.1, 0.6], step: 0.05 },
     tickLength: 100,
     modulatorRatio: { choose: [10 / 3, 8 / 3] },

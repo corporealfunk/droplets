@@ -13,6 +13,7 @@ class DensitySynth {
     densityEnvelope,
     pitchSet,
     lengthRange,
+    sustainRatioRange,
     polyphony = 4,
     gainRange,
     tickLength = 1000,
@@ -25,6 +26,7 @@ class DensitySynth {
     this.densityEnvelope = densityEnvelope;
     this.pitchSet = pitchSet;
     this.lengthRange = lengthRange;
+    this.sustainRatioRange = sustainRatioRange;
     this.polyphony = polyphony;
     this.gainRange = gainRange;
     this.tickLength = tickLength;
@@ -132,7 +134,7 @@ class DensitySynth {
       const genOptions = makeNote({
         length: this.lengthRange,
         attackRatio: 0.25,
-        sustainRatio: 0.25,
+        sustainRatio: this.sustainRatioRange,
         sustainAmplitude: { range: [0.2, 0.6], step: 0.1 },
         modIndexStart: 100,
         modIndexStop: 10,
@@ -177,7 +179,7 @@ class DensitySynth {
           });
 
           tone.setNote(genOptions).start(startOffset);
-          this.trigger('play', { slot: i, genOptions });
+          this.trigger('play', { slot: i, genOptions, startOffset });
           this.log('            ::Play First Note on slot, offset', i, startOffset);
         }
       }

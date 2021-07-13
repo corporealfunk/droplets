@@ -21,8 +21,6 @@ export default class extends Controller {
       );
     }
 
-    this.printStats();
-
     this.synth.on('tick', this.printStats.bind(this));
     this.synth.on('play', this.printPlay.bind(this));
   }
@@ -45,15 +43,22 @@ export default class extends Controller {
     }
   }
 
-  printPlay({ slot, genOptions }) {
-    this.slotTargets[slot].innerHTML = `
+  printPlay({ slot, genOptions, startOffset = 0 }) {
+    if (startOffset === 0) {
+      this.slotTargets[slot].innerHTML = `
       note: ${genOptions.carrierFreq.valueOf().toFixed(2)} for ${genOptions.length} ms
-    `;
+      `;
 
-    setTimeout(
-      () => this.printOff(slot),
-      genOptions.length - 80,
-    );
+      setTimeout(
+        () => this.printOff(slot),
+        genOptions.length - 50,
+      );
+    } else {
+      setTimeout(
+        () => this.printPlay({ slot, genOptions }),
+        startOffset,
+      );
+    }
   }
 
   printOff(slot) {

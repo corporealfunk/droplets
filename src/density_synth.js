@@ -2,8 +2,9 @@ import * as Tone from 'tone';
 import Droplet from './droplet';
 import makeNote from './make_note';
 import { rangeFrom } from './value_utils';
+import Events from './events';
 
-export default class {
+class DensitySynth {
   // densityEnvelope is a ControlEnvelope defined in ms
   // pitchSet: array of hz
   // lengthRange: array of two ints, defining shortest, longest note in ms
@@ -19,6 +20,7 @@ export default class {
     modulatorWobbleRange,
     carrierWobbleRange,
     log = false,
+    name = 'DensitySynth',
   }) {
     this.densityEnvelope = densityEnvelope;
     this.pitchSet = pitchSet;
@@ -30,6 +32,7 @@ export default class {
     this.modulatorWobbleRange = modulatorWobbleRange;
     this.carrierWobbleRange = carrierWobbleRange;
     this.logFlag = log;
+    this.name = name;
     this.slots = Array(polyphony);
 
     this.output = new Tone.Gain(1);
@@ -62,6 +65,7 @@ export default class {
     this.log('DS::tick()');
 
     if (this.elapsedTime < this.densityEnvelope.length) {
+      this.trigger('tick');
       this.decide();
 
       setTimeout(
@@ -73,6 +77,10 @@ export default class {
 
   // returns ms
   get elapsedTime() {
+    if (!this.startTime) {
+      return null;
+    }
+
     return Date.now() - this.startTime;
   }
 
@@ -98,9 +106,17 @@ export default class {
     return count;
   }
 
+  get requestedDensity() {
+    if (!this.elapsedTime) {
+      return 0;
+    }
+
+    return this.densityEnvelope.sample(this.elapsedTime);
+  }
+
   decide() {
     this.log('DensitySynth::decide()');
-    const requestedDensity = this.densityEnvelope.sample(this.elapsedTime);
+    const { requestedDensity } = this;
 
     // for each slot: if we schedule the next not NOW, will we meet
     // the requestedDensity within a reasonable margin?
@@ -148,6 +164,7 @@ export default class {
           this.log('            ::Play');
           this.slots[i].lastNote = genOptions;
           tone.setNote(genOptions).start();
+          this.trigger('play', { slot: i, genOptions });
         }
       } else {
         const currentDensity = ((this.playingOrScheduledCount) / this.polyphony);
@@ -160,9 +177,20 @@ export default class {
           });
 
           tone.setNote(genOptions).start(startOffset);
+          this.trigger('play', { slot: i, genOptions });
           this.log('            ::Play First Note on slot, offset', i, startOffset);
         }
       }
     }
   }
+
+  stats() {
+    return {
+      'Requested Density': this.requestedDensity,
+    };
+  }
 }
+
+Object.assign(DensitySynth.prototype, Events);
+
+export default DensitySynth;

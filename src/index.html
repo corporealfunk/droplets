@@ -58,9 +58,16 @@
         <a class="pure-button" id="go" href="#" data-action="tone#start">GO</a>
       </div>
     </div>
-    <div class="pure-u-1 pure-u-md-1-3">
+    <div class="pure-u-1 pure-u-md-1-3" data-controller="score">
       <div class="l-box">
-        <a class="pure-button" id="goRun" href="#">RUN</a>
+        <p>
+          <a class="pure-button pure-button-disabled" href="#" data-score-target="start" data-action="score#start">RUN</a>
+        </p>
+        <p>
+          Synth List:
+        </p>
+        <div data-score-target="synthList">
+        </div>
       </div>
     </div>
   </div>

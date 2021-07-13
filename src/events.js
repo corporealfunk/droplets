@@ -26,7 +26,7 @@ const Events = {
     this._events = {};
   },
 
-  trigger: function (eventName) {
+  trigger: function (eventName, data = {}) {
     this._initEvents();
     // const eventArray = this._events[eventName] || [];
     const eventArray = [];
@@ -37,7 +37,7 @@ const Events = {
       }
     });
 
-    eventArray.forEach((cb) => cb());
+    eventArray.forEach((cb) => cb(data));
   },
 };
 

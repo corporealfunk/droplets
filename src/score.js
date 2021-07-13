@@ -1,13 +1,14 @@
 import * as Tone from 'tone';
 import ControlEnvelope from './control_envelope';
 import DensitySynth from './density_synth';
+import { minsToMs } from './value_utils';
 
 const bassSynth = () => {
   const densityEnvelope = new ControlEnvelope({
     0: 0.25,
-    600000: 0.5,
-    1200000: 1,
-    1800000: 0.25,
+    [minsToMs(10)]: 0.5,
+    [minsToMs(20)]: 1,
+    [minsToMs(30)]: 0.25,
   });
 
   const pitchSet = {
@@ -30,6 +31,7 @@ const bassSynth = () => {
     modulatorWobbleRange: { range: [4, 7], step: 1 },
     carrierWobbleRange: { range: [0, 0], step: 1 },
     tickLength: 5000,
+    name: 'Bass',
     log: false,
   });
 };
@@ -37,9 +39,9 @@ const bassSynth = () => {
 const bellSynth = () => {
   const densityEnvelope = new ControlEnvelope({
     0: 0,
-    900000: 0,
-    1200000: 1,
-    1500000: 0,
+    [minsToMs(15)]: 0,
+    [minsToMs(20)]: 1,
+    [minsToMs(30)]: 0,
   });
 
   const pitchSet = {
@@ -66,6 +68,7 @@ const bellSynth = () => {
     modulatorRatio: { choose: [5 / 3, 3 / 2, 4 / 3] },
     modulatorWobbleRange: { range: [0, 0], step: 1 },
     carrierWobbleRange: { range: [4, 7], step: 1 },
+    name: 'Bells',
     log: false,
   });
 };
@@ -73,8 +76,8 @@ const bellSynth = () => {
 const hiSynth = () => {
   const densityEnvelope = new ControlEnvelope({
     0: 0,
-    900000: 0,
-    1500000: 1,
+    [minsToMs(15)]: 0,
+    [minsToMs(30)]: 1,
   });
 
   const pitchSet = {
@@ -113,18 +116,23 @@ const hiSynth = () => {
     modulatorRatio: { choose: [10 / 3, 8 / 3] },
     modulatorWobbleRange: { range: [0, 0], step: 1 },
     carrierWobbleRange: { range: [4, 7], step: 1 },
+    name: 'HiSynth',
     log: false,
   });
 };
 
-console.log(bassSynth, bellSynth, hiSynth);
+const synths = [bassSynth(), bellSynth(), hiSynth()];
 
 const score = {
+  synths,
+
   start: () => {
     const output = new Tone.Gain(1);
-    bellSynth().start().connect(output);
-    bassSynth().start().connect(output);
-    hiSynth().start().connect(output);
+
+    synths.forEach((synth) => {
+      synth.start().connect(output);
+    });
+
     return output;
   },
 };

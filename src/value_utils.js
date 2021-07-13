@@ -18,10 +18,21 @@ const minsToMs = (minutes) => minutes * 60000;
 
 const secondsToMs = (seconds) => seconds * 1000;
 
+const prettyPrintMs = (ms) => {
+  const hours = Math.floor(ms / (3600000));
+  const minutes = Math.floor(ms / 60000);
+  const seconds = Math.round((ms % 60000) / 1000);
+
+  const pad = (number) => String(number).padStart(2, '0');
+
+  return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+};
+
 export {
   rangeFrom,
   chooseFrom,
   minimum,
   minsToMs,
   secondsToMs,
+  prettyPrintMs,
 };

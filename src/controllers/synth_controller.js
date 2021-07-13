@@ -28,26 +28,35 @@ export default class extends Controller {
   }
 
   printStats() {
-    this.statsTarget.innerHTML = '';
-    const stats = this.synth.stats();
+    if (!this.lastStatsPrint || Date.now() - this.lastStatsPrint > 10000) {
+      const stats = this.synth.stats();
+      let HTML = '';
 
-    Object.keys(stats).forEach((key) => {
-      this.statsTarget.insertAdjacentHTML(
-        'beforeend',
-        `<tr>
+      Object.keys(stats).forEach((key) => {
+        HTML += `<tr>
           <td>${key}:</td>
           <td>${stats[key]}</td>
-         </tr>
-        `,
-      );
-    });
+          </tr>
+        `;
+      });
+      this.statsTarget.innerHTML = HTML;
+      console.log(this.statsTarget.innerHTML);
+      this.lastStatsPrint = Date.now();
+    }
   }
 
   printPlay({ slot, genOptions }) {
-    this.statsTarget.innerHTML = '';
-
     this.slotTargets[slot].innerHTML = `
       note: ${genOptions.carrierFreq.valueOf().toFixed(2)} for ${genOptions.length} ms
     `;
+
+    setTimeout(
+      () => this.printOff(slot),
+      genOptions.length - 80,
+    );
+  }
+
+  printOff(slot) {
+    this.slotTargets[slot].innerHTML = '-';
   }
 }

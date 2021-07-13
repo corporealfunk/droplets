@@ -5,8 +5,8 @@ import { minsToMs } from './value_utils';
 
 const bassSynth = () => {
   const densityEnvelope = new ControlEnvelope({
-    0: 0.25,
-    [minsToMs(10)]: 0.5,
+    0: 0.5,
+    [minsToMs(10)]: 0.75,
     [minsToMs(20)]: 1,
     [minsToMs(30)]: 0.25,
   });

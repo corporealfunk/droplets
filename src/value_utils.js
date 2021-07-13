@@ -30,6 +30,7 @@ const prettyPrintMs = (ms) => {
 
 const quarterTone = 1.00057778950655 ** 50;
 const eighthTone = 1.00057778950655 ** 25;
+const betweenTone = 1.00057778950655 ** 35;
 
 export {
   rangeFrom,
@@ -40,4 +41,5 @@ export {
   prettyPrintMs,
   quarterTone,
   eighthTone,
+  betweenTone,
 };

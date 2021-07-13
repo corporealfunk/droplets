@@ -46,37 +46,30 @@ class Droplet {
     });
 
     // Make the length shorter
-    const shortenBy = rangeFrom({
+    const entryPercent = rangeFrom({
       range: [
-        0.20,
-        0.80,
+        0.10,
+        0.40,
       ],
       step: 0.1,
     });
 
-    const wobbleLength = length * shortenBy;
-    const lengthDelta = length - wobbleLength;
+    this.wobbleStartTime = entryPercent * length;
+
+    const wobbleLength = length - this.wobbleStartTime;
 
     this.wobbleTone.setNote({
       length: wobbleLength,
       attackRatio: rangeFrom({ range: [0.01, 0.05], step: 0.01 }),
-      sustainRatio: 0.25,
+      sustainRatio: 0.5,
       sustainAmplitude: rangeFrom({ range: [0.3, 0.6], step: 0.1 }),
       modIndexStart,
-      modIndexStop,
+      modIndexStop: modIndexStart,
       modulatorFreq: modulatorFreq + modulatorWobble,
       carrierFreqStart: carrierFreqStart + carrierWobble,
       carrierFreqStop: carrierFreqStop + carrierWobble,
       panning,
       gain: rangeFrom({ range: [gain / 2, gain], step: 0.05 }),
-    });
-
-    this.wobbleStartTime = rangeFrom({
-      range: [
-        0,
-        lengthDelta / 2,
-      ],
-      step: 1,
     });
 
     return this;

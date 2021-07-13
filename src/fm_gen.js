@@ -97,7 +97,7 @@ class FmGen {
       this.sustainAmplitude,
       getTimeAt(this.attackLength + this.sustainLength),
     );
-    this.amplitude.exponentialRampToValueAtTime(0, getTimeAt(this.length));
+    this.amplitude.linearRampToValueAtTime(0, getTimeAt(this.length));
 
     // schedule the carrierFrequency envelope:
     this.modIndex.setValueAtTime(this.modIndexStart, getTimeAt(0));
@@ -105,7 +105,7 @@ class FmGen {
 
     // schedule the carrierFrequency envelope:
     this.carrierFreq.setValueAtTime(this.carrierFreqStart, getTimeAt(0));
-    this.carrierFreq.exponentialRampTo(this.carrierFreqStop, getTimeAt(this.length));
+    this.carrierFreq.linearRampToValueAtTime(this.carrierFreqStop, getTimeAt(this.length));
 
     // schedule when to stop
     this.stop(getTimeAt(this.length));

@@ -6,12 +6,12 @@ import Events from './events';
 
 class DensitySynth {
   // densityEnvelope is a ControlEnvelope defined in ms
-  // pitchSet: array of hz
+  // pitchSets: object. Keys are times, values are choose objects
   // lengthRange: array of two ints, defining shortest, longest note in ms
   // polyphony: number of possible concurrent tones
   constructor({
     densityEnvelope,
-    pitchSet,
+    pitchSets,
     lengthRange,
     sustainRatioRange,
     polyphony = 4,
@@ -24,7 +24,7 @@ class DensitySynth {
     name = 'DensitySynth',
   }) {
     this.densityEnvelope = densityEnvelope;
-    this.pitchSet = pitchSet;
+    this.pitchSets = pitchSets;
     this.lengthRange = lengthRange;
     this.sustainRatioRange = sustainRatioRange;
     this.polyphony = polyphony;
@@ -116,6 +116,28 @@ class DensitySynth {
     return this.densityEnvelope.sample(this.elapsedTime);
   }
 
+  get currentPitchSet() {
+    const times = Object.keys(
+      this.pitchSets,
+    ).sort((a, b) => a - b).map((val) => parseInt(val, 10));
+
+    // get the first one
+    let pitchSet = this.pitchSets[times[0]];
+
+    if (!this.elapsedTime) {
+      return pitchSet;
+    }
+
+    for (let i = times.length - 1; i >= 0; i -= 1) {
+      if (times[i] <= this.elapsedTime) {
+        pitchSet = this.pitchSets[times[i]];
+        break;
+      }
+    }
+
+    return pitchSet;
+  }
+
   decide() {
     this.log('DensitySynth::decide()');
     const { requestedDensity } = this;
@@ -138,7 +160,7 @@ class DensitySynth {
         sustainAmplitude: { range: [0.2, 0.6], step: 0.1 },
         modIndexStart: 100,
         modIndexStop: 10,
-        carrierFreq: this.pitchSet,
+        carrierFreq: this.currentPitchSet,
         panning: { range: [-1.0, 1.0], step: 0.1 },
         gain: this.gainRange,
         modulatorRatio: this.modulatorRatio,

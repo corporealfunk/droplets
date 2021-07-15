@@ -1,7 +1,12 @@
 import * as Tone from 'tone';
 import ControlEnvelope from './control_envelope';
 import DensitySynth from './density_synth';
-import { minsToMs, eighthTone, betweenTone } from './value_utils';
+import {
+  minsToMs,
+  eighthTone,
+  betweenTone,
+  centsAdd,
+} from './value_utils';
 
 const bassSynth = () => {
   const densityEnvelope = new ControlEnvelope({
@@ -42,32 +47,141 @@ const bassSynth = () => {
 const bellSynth = () => {
   const densityEnvelope = new ControlEnvelope({
     0: 0,
-    [minsToMs(12)]: 0,
+    [minsToMs(5)]: 0,
+    [minsToMs(12)]: 0.5,
     [minsToMs(20)]: 1,
-    [minsToMs(30)]: 0.4,
   });
 
+  const pitchSetA = {
+    choose: [
+      // Tone.Frequency('Bb3'),
+      [Tone.Frequency('G3') * centsAdd(50), Tone.Frequency('F3')],
+      Tone.Frequency('G3'),
+      Tone.Frequency('C4') * centsAdd(35),
+      Tone.Frequency('C4'),
+      [Tone.Frequency('C4') * centsAdd(50), Tone.Frequency('Bb3') * centsAdd(-50)],
+      Tone.Frequency('Eb4') * centsAdd(35),
+      Tone.Frequency('Eb4'),
+      Tone.Frequency('Eb4'),
+      Tone.Frequency('Eb4'),
+      // Tone.Frequency('F4'),
+      [Tone.Frequency('G4') * centsAdd(50), Tone.Frequency('F4')],
+      Tone.Frequency('G4') * centsAdd(35),
+      Tone.Frequency('G4'),
+      Tone.Frequency('G4'),
+      // Tone.Frequency('Bb4'),
+      [Tone.Frequency('C5') * centsAdd(50), Tone.Frequency('Bb4') * centsAdd(-50)],
+      Tone.Frequency('C5') * centsAdd(35),
+      Tone.Frequency('C5'),
+      Tone.Frequency('C5'),
+      // Tone.Frequency('Eb5'),
+      // Tone.Frequency('F5'),
+    ],
+  };
+
+  const pitchSetB = {
+    choose: [
+      [Tone.Frequency('G3') * centsAdd(50), Tone.Frequency('F3')],
+      Tone.Frequency('G3'),
+      Tone.Frequency('G3'),
+      Tone.Frequency('G3'),
+      [Tone.Frequency('C4') * centsAdd(50), Tone.Frequency('Bb3') * centsAdd(-50)],
+      Tone.Frequency('C4') * centsAdd(35),
+      Tone.Frequency('C4'),
+      Tone.Frequency('C4'),
+      Tone.Frequency('C4'),
+      Tone.Frequency('Eb4') * centsAdd(35),
+      Tone.Frequency('Eb4'),
+      Tone.Frequency('Eb4'),
+      Tone.Frequency('Eb4'),
+      Tone.Frequency('F4'),
+      Tone.Frequency('F4'),
+      Tone.Frequency('F4'),
+      Tone.Frequency('F4'),
+      [Tone.Frequency('G4') * centsAdd(50), Tone.Frequency('F4')],
+      Tone.Frequency('G4') * centsAdd(35),
+      Tone.Frequency('G4'),
+      Tone.Frequency('G4'),
+      Tone.Frequency('Bb4'),
+      Tone.Frequency('Bb4'),
+      Tone.Frequency('Bb4'),
+      Tone.Frequency('Bb4'),
+      [Tone.Frequency('C5') * centsAdd(50), Tone.Frequency('Bb4') * centsAdd(-50)],
+      Tone.Frequency('C5') * centsAdd(35),
+      Tone.Frequency('C5'),
+      Tone.Frequency('C5'),
+      Tone.Frequency('Eb5') * centsAdd(35),
+      Tone.Frequency('Eb5'),
+      Tone.Frequency('Eb5'),
+      Tone.Frequency('Eb5'),
+      [Tone.Frequency('F5') * centsAdd(35), Tone.Frequency('Eb5')],
+      Tone.Frequency('F5'),
+      Tone.Frequency('F5'),
+      Tone.Frequency('F5'),
+    ],
+  };
+
+  const pitchSetC = {
+    choose: [
+      Tone.Frequency('G3'),
+      Tone.Frequency('C4') * centsAdd(35),
+      Tone.Frequency('C4'),
+      Tone.Frequency('Eb4') * centsAdd(35),
+      Tone.Frequency('Eb4'),
+      Tone.Frequency('Eb4'),
+      Tone.Frequency('F4'),
+      Tone.Frequency('F4'),
+      [Tone.Frequency('G4') * centsAdd(50), Tone.Frequency('F4')],
+      Tone.Frequency('G4') * centsAdd(35),
+      Tone.Frequency('G4'),
+      Tone.Frequency('G4'),
+      Tone.Frequency('Bb4'),
+      Tone.Frequency('Bb4'),
+      Tone.Frequency('Bb4'),
+      Tone.Frequency('Bb4'),
+      Tone.Frequency('C5') * centsAdd(35),
+      Tone.Frequency('C5'),
+      Tone.Frequency('Eb5') * centsAdd(35),
+      Tone.Frequency('Eb5'),
+      Tone.Frequency('Eb5'),
+      Tone.Frequency('Eb5'),
+      [Tone.Frequency('F5') * centsAdd(35), Tone.Frequency('Eb5')],
+      Tone.Frequency('F5'),
+      Tone.Frequency('F5'),
+      [Tone.Frequency('G5') * centsAdd(35), Tone.Frequency('F5')],
+      Tone.Frequency('G5'),
+      Tone.Frequency('G5'),
+      Tone.Frequency('G5'),
+    ],
+  };
+
+  /*
+  const pitchSetB = {
+    choose: [
+      Tone.Frequency('Bb3'),
+      Tone.Frequency('C4'),
+      Tone.Frequency('Eb4'),
+      Tone.Frequency('F4'),
+      Tone.Frequency('G4'),
+      Tone.Frequency('Bb4'),
+      Tone.Frequency('C5'),
+      Tone.Frequency('Eb5'),
+      Tone.Frequency('F5'),
+    ],
+  };
+  */
+
   const pitchSets = {
-    0: {
-      choose: [
-        Tone.Frequency('Bb3'),
-        Tone.Frequency('C4'),
-        Tone.Frequency('Eb4'),
-        Tone.Frequency('F4'),
-        Tone.Frequency('G4'),
-        Tone.Frequency('Bb4'),
-        Tone.Frequency('C5'),
-        Tone.Frequency('Eb5'),
-        Tone.Frequency('F5'),
-      ],
-    },
+    0: pitchSetA,
+    [minsToMs(12)]: pitchSetB,
+    [minsToMs(18)]: pitchSetC,
   };
 
   return new DensitySynth({
     densityEnvelope,
     pitchSets,
     polyphony: 8,
-    lengthRange: { range: [6000, 30000], step: 1000 },
+    lengthRange: { range: [6000, 10000], step: 1000 },
     sustainRatioRange: { range: [0.25, 0.5], step: 0.05 },
     gainRange: { range: [0.1, 0.7], step: 0.05 },
     tickLength: 100,
@@ -127,6 +241,12 @@ const hiSynth = () => {
     log: false,
   });
 };
+
+console.log(
+  bassSynth,
+  bellSynth,
+  hiSynth,
+);
 
 const synths = [
   bassSynth(),

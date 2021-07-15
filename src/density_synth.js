@@ -213,6 +213,15 @@ class DensitySynth {
       'Requested Density': this.requestedDensity,
     };
   }
+
+  // move forward or back in the score by some ms
+  jumpTime(ms) {
+    if (!this.startTime) {
+      return;
+    }
+
+    this.startTime += -ms;
+  }
 }
 
 Object.assign(DensitySynth.prototype, Events);

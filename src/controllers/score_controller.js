@@ -39,6 +39,22 @@ export default class extends Controller {
     });
   }
 
+  subtract(e) {
+    e.preventDefault();
+
+    this.changeElapsedTime(-1);
+  }
+
+  add(e) {
+    e.preventDefault();
+    this.changeElapsedTime(1);
+  }
+
+  changeElapsedTime(mins) {
+    score.synths.forEach((synth) => synth.jumpTime(mins * 60000));
+    this.startTime += mins * -60000;
+  }
+
   get elapsedTime() {
     return Date.now() - this.startTime;
   }

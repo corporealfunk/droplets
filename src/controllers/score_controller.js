@@ -26,9 +26,9 @@ export default class extends Controller {
 
     Tone.start().then(() => {
       const reverb = new Tone.Reverb({
-        delay: 3,
+        decay: 5,
         preDelay: 0.1,
-        wet: 0.4,
+        wet: 0.5,
       }).toDestination();
       const outGain = new Tone.Gain(0.5);
       outGain.connect(reverb);

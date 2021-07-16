@@ -232,7 +232,7 @@ const hiSynth = () => {
     polyphony: 8,
     lengthRange: { range: [2000, 5100], step: 100 },
     sustainRatioRange: { range: [0.2, 0.4], step: 0.05 },
-    gainRange: { range: [0.05, 0.25], step: 0.05 },
+    gainRange: { range: [0.15, 0.4], step: 0.05 },
     tickLength: 100,
     modulatorRatio: { choose: [10 / 3, 8 / 3] },
     modulatorWobbleRange: { range: [0, 0], step: 1 },

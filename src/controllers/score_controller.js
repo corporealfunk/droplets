@@ -1,20 +1,34 @@
 import { Controller } from 'stimulus';
 import * as Tone from 'tone';
-import score from '../score';
+import scores from '../score';
 import { prettyPrintMs } from '../value_utils';
 
 export default class extends Controller {
   static targets = ['start', 'synthList', 'timer'];
 
+  static values = {
+    index: Number,
+  };
+
+  get score() {
+    return scores[this.indexValue];
+  }
+
   connect() {
-    score.synths.forEach((synth, i) => {
+    this.score.synths.forEach((synth, i) => {
+      let slotListHtml = '';
+
+      for (let x = 0; x < synth.polyphony; x += 1) {
+        slotListHtml += '<li data-synth-target="slot">-</li>';
+      }
+
       this.synthListTarget.insertAdjacentHTML(
         'beforeend',
-        `<div data-controller='synth' data-synth-index-value='${i}'>
+        `<div data-controller='synth' data-synth-score-index-value='${this.indexValue}' data-synth-synth-index-value='${i}'>
           <h5>${synth.name}</h5>
           <table data-synth-target='stats'>
           </table>
-          <ol data-synth-target='slotList'></ol>
+          <ol data-synth-target='slotList'>${slotListHtml}</ol>
         </div>`,
       );
     });
@@ -30,10 +44,10 @@ export default class extends Controller {
         preDelay: 0.1,
         wet: 0.5,
       }).toDestination();
-      const outGain = new Tone.Gain(0.5);
+      const outGain = new Tone.Gain(0.45);
       outGain.connect(reverb);
       e.preventDefault();
-      score.start().connect(outGain);
+      this.score.start().connect(outGain);
       this.startTime = Date.now();
       this.setTimer();
     });
@@ -51,7 +65,7 @@ export default class extends Controller {
   }
 
   changeElapsedTime(mins) {
-    score.synths.forEach((synth) => synth.jumpTime(mins * 60000));
+    this.score.synths.forEach((synth) => synth.jumpTime(mins * 60000));
     this.startTime += mins * -60000;
   }
 

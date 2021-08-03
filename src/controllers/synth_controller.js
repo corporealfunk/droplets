@@ -1,10 +1,19 @@
 import { Controller } from 'stimulus';
-import score from '../score';
+import scores from '../score';
 
 export default class extends Controller {
   static values = {
-    index: Number,
+    scoreIndex: Number,
+    synthIndex: Number,
   };
+
+  get score() {
+    return scores[this.scoreIndexValue];
+  }
+
+  get synth() {
+    return this.score.synths[this.synthIndexValue];
+  }
 
   static targets = [
     'slotList',
@@ -13,14 +22,6 @@ export default class extends Controller {
   ];
 
   connect() {
-    this.synth = score.synths[this.indexValue];
-    for (let i = 0; i < this.synth.polyphony; i += 1) {
-      this.slotListTarget.insertAdjacentHTML(
-        'beforeend',
-        '<li data-synth-target="slot">-</li>',
-      );
-    }
-
     this.synth.on('tick', this.printStats.bind(this));
     this.synth.on('play', this.printPlay.bind(this));
   }

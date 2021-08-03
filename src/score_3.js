@@ -42,7 +42,7 @@ const bassSynth = () => {
     polyphony: 2,
     lengthRange: { range: [120000, 220000], step: 10000 },
     sustainRatioRange: { range: [0.4, 0.6], step: 0.05 },
-    gainRange: { range: [0.5, 1.0], step: 0.1 },
+    gainRange: { range: [1, 1], step: 1 },
     modulatorRatio: 5 / 3,
     modulatorWobbleRange: { range: [4, 7], step: 1 },
     carrierWobbleRange: { range: [0, 0], step: 1 },

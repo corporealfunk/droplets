@@ -70,7 +70,7 @@ const bellSynth = () => {
   return new DensitySynth({
     densityEnvelope,
     pitchSets,
-    polyphony: 8,
+    polyphony: 6,
     lengthRange: { range: [6000, 10000], step: 1000 },
     sustainRatioRange: { range: [0.25, 0.5], step: 0.05 },
     gainRange: { range: [0.1, 0.7], step: 0.05 },

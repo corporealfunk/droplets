@@ -195,10 +195,14 @@ class DensitySynth {
         this.log('            ::first note decide, slot, vertDensity, requestedDensity', currentDensity, requestedDensity);
         if (currentDensity < requestedDensity) {
           this.slots[i].lastNote = genOptions;
-          const startOffset = (i === 0) ? 0 : genOptions.length / rangeFrom({
-            range: [2, 5],
-            step: 1,
-          });
+          let startOffset = 0;
+          if (i !== 0) {
+            const multipler = requestedDensity < 0.5 ? 1 : rangeFrom({
+              range: [1.5, 2.5],
+              step: 0.1,
+            });
+            startOffset = (this.slots[i - 1].lastNote.length * (1 - requestedDensity)) * multipler;
+          }
 
           tone.setNote(genOptions).start(startOffset);
           this.trigger('play', { slot: i, genOptions, startOffset });

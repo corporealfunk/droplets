@@ -44,7 +44,7 @@ export default class extends Controller {
         preDelay: 0.1,
         wet: 0.5,
       }).toDestination();
-      const outGain = new Tone.Gain(0.45);
+      const outGain = new Tone.Gain(0.3);
       outGain.connect(reverb);
       e.preventDefault();
       this.score.start().connect(outGain);

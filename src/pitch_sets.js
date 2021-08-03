@@ -129,6 +129,43 @@ const pitchSetC = {
 
 const pitchSetHiA = {
   choose: [
+    [Tone.Frequency('G5') * centsAdd(50), Tone.Frequency('F5') * centsAdd(-50)],
+    Tone.Frequency('G5'),
+    Tone.Frequency('Bb5') * eighthTone,
+    [Tone.Frequency('Bb5') * centsAdd(50), Tone.Frequency('G5') * centsAdd(-50)],
+    Tone.Frequency('Bb5'),
+    Tone.Frequency('C6') * eighthTone,
+    Tone.Frequency('C6'),
+    [Tone.Frequency('C6') * centsAdd(50), Tone.Frequency('Bb5') * centsAdd(-50)],
+    Tone.Frequency('Eb6') * eighthTone,
+    Tone.Frequency('Eb6'),
+    [Tone.Frequency('Eb6') * centsAdd(50), Tone.Frequency('C5') * centsAdd(-50)],
+    Tone.Frequency('F6') * centsAdd(50),
+    Tone.Frequency('F6'),
+    [Tone.Frequency('F6') * centsAdd(50), Tone.Frequency('Eb5') * centsAdd(-50)],
+    Tone.Frequency('G6') * centsAdd(50),
+    Tone.Frequency('G6') * centsAdd(35),
+    Tone.Frequency('G6'),
+    [Tone.Frequency('G6') * centsAdd(50), Tone.Frequency('F6') * centsAdd(-50)],
+    Tone.Frequency('Bb6'),
+    Tone.Frequency('Bb6') * centsAdd(35),
+    Tone.Frequency('Bb6'),
+    [Tone.Frequency('Bb6') * centsAdd(50), Tone.Frequency('G6') * centsAdd(-50)],
+    Tone.Frequency('C7') * centsAdd(50),
+    Tone.Frequency('C7'),
+    Tone.Frequency('C7'),
+    [Tone.Frequency('C7') * centsAdd(50), Tone.Frequency('Bb6') * centsAdd(-50)],
+    Tone.Frequency('Eb7') * centsAdd(50),
+    Tone.Frequency('Eb7'),
+    [Tone.Frequency('Eb7') * centsAdd(50), Tone.Frequency('C7') * centsAdd(-50)],
+    Tone.Frequency('F7') * betweenTone,
+    Tone.Frequency('F7'),
+    [Tone.Frequency('F7') * centsAdd(50), Tone.Frequency('Eb7')],
+  ],
+};
+
+const pitchSetHiB = {
+  choose: [
     [Tone.Frequency('G5') * betweenTone, Tone.Frequency('F#5') * betweenTone],
     Tone.Frequency('G5'),
     Tone.Frequency('Bb5') * eighthTone,
@@ -162,4 +199,5 @@ export {
   pitchSetC,
   pitchesJesseSolo,
   pitchSetHiA,
+  pitchSetHiB,
 };

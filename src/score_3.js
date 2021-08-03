@@ -9,6 +9,7 @@ import {
   pitchSetB,
   pitchSetC,
   pitchSetHiA,
+  pitchSetHiB,
 } from './pitch_sets';
 
 const bassSynth = () => {
@@ -57,6 +58,7 @@ const bellSynth = () => {
     [minsToMs(5)]: 0,
     [minsToMs(12)]: 0.5,
     [minsToMs(25)]: 1,
+    [minsToMs(35)]: 0.3,
   });
 
   const pitchSets = {
@@ -92,6 +94,7 @@ const hiSynth = () => {
 
   const pitchSets = {
     0: pitchSetHiA,
+    [minsToMs(28)]: pitchSetHiB,
   };
 
   return new DensitySynth({

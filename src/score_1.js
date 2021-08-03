@@ -55,7 +55,8 @@ const bellSynth = () => {
     0: 0,
     [minsToMs(12)]: 0,
     [minsToMs(15)]: 0.8,
-    [minsToMs(20)]: 0.4,
+    [minsToMs(25)]: 0.4,
+    [minsToMs(35)]: 0.25,
   });
 
   const pitchSets = {

@@ -161,7 +161,7 @@ class DensitySynth {
         modIndexStart: 100,
         modIndexStop: 10,
         carrierFreq: this.currentPitchSet,
-        panning: { range: [-1.0, 1.0], step: 0.1 },
+        panning: { range: [-0.8, 0.8], step: 0.1 },
         gain: this.gainRange,
         modulatorRatio: this.modulatorRatio,
         modulatorWobble: this.modulatorWobbleRange,

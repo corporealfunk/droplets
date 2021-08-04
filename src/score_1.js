@@ -8,6 +8,7 @@ import {
 } from './value_utils';
 import {
   pitchesJesseSolo,
+  pitchSetBassB,
 } from './pitch_sets';
 
 const bassSynth = () => {
@@ -20,18 +21,7 @@ const bassSynth = () => {
   });
 
   const pitchSets = {
-    0: {
-      choose: [
-        Tone.Frequency('Eb2'),
-        [Tone.Frequency('Eb2'), Tone.Frequency('C2')],
-        Tone.Frequency('F2'),
-        [Tone.Frequency('F2'), Tone.Frequency('C2')],
-        [Tone.Frequency('G2'), Tone.Frequency('Eb2')],
-        Tone.Frequency('Bb2'),
-        Tone.Frequency('C3'),
-        [Tone.Frequency('C3'), Tone.Frequency('Bb2')],
-      ],
-    },
+    0: pitchSetBassB,
   };
 
   return new DensitySynth({

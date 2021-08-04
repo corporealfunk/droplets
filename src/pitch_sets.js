@@ -5,6 +5,32 @@ import {
   betweenTone,
 } from './value_utils';
 
+const pitchSetBassA = {
+  choose: [
+    Tone.Frequency('Bb1'),
+    Tone.Frequency('C2'),
+    [Tone.Frequency('C2'), Tone.Frequency('Bb1')],
+    Tone.Frequency('Eb2'),
+    [Tone.Frequency('Eb2'), Tone.Frequency('C2')],
+    Tone.Frequency('F2'),
+    [Tone.Frequency('F2'), Tone.Frequency('C2')],
+    [Tone.Frequency('G2'), Tone.Frequency('Eb2')],
+  ],
+};
+
+const pitchSetBassB = {
+  choose: [
+    Tone.Frequency('Eb2'),
+    [Tone.Frequency('Eb2'), Tone.Frequency('C2')],
+    Tone.Frequency('F2'),
+    [Tone.Frequency('F2'), Tone.Frequency('C2')],
+    [Tone.Frequency('G2'), Tone.Frequency('Eb2')],
+    Tone.Frequency('Bb2'),
+    Tone.Frequency('C3'),
+    [Tone.Frequency('C3'), Tone.Frequency('Bb2')],
+  ],
+};
+
 const pitchSetA = {
   choose: [
     [Tone.Frequency('G3') * centsAdd(50), Tone.Frequency('F3')],
@@ -200,4 +226,6 @@ export {
   pitchesJesseSolo,
   pitchSetHiA,
   pitchSetHiB,
+  pitchSetBassA,
+  pitchSetBassB,
 };

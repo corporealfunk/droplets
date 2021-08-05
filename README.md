@@ -18,7 +18,7 @@ Mobile phones generally have issues as well, though higher end phones have not b
 
 Install dependencies:
 
-```npm install``
+```npm install```
 
 To run the dev server:
 

@@ -8,6 +8,7 @@ import {
   pitchSetA,
   pitchSetB,
   pitchSetC,
+  pitchSetD,
   pitchSetHiA,
   pitchSetHiB,
   pitchSetBassB,
@@ -58,7 +59,8 @@ const bellSynth = () => {
   const pitchSets = {
     0: pitchSetA,
     [minsToMs(12)]: pitchSetB,
-    [minsToMs(18)]: pitchSetC,
+    [minsToMs(17)]: pitchSetC,
+    [minsToMs(25)]: pitchSetD,
   };
 
   return new DensitySynth({
@@ -116,11 +118,11 @@ const synths = [
 const score = {
   synths,
 
-  start: () => {
+  start: (scoreTimeMs = 0) => {
     const output = new Tone.Gain(1);
 
     synths.forEach((synth) => {
-      synth.start().connect(output);
+      synth.start(scoreTimeMs).connect(output);
     });
 
     return output;

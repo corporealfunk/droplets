@@ -56,9 +56,10 @@ class DensitySynth {
     }
   }
 
-  start() {
+  // scoreTimeMs: milliseconds into the score where you want to start playing
+  start(scoreTimeMs = 0) {
     this.log('DS::()');
-    this.startTime = Date.now();
+    this.startTime = Date.now() - scoreTimeMs;
     this.tick();
     return this.output;
   }

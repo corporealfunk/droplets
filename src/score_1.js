@@ -125,11 +125,11 @@ const synths = [
 const score = {
   synths,
 
-  start: () => {
+  start: (scoreTimeMs = 0) => {
     const output = new Tone.Gain(1);
 
     synths.forEach((synth) => {
-      synth.start().connect(output);
+      synth.start(scoreTimeMs).connect(output);
     });
 
     return output;

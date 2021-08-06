@@ -61,7 +61,7 @@ const bellSynth = () => {
     sustainRatioRange: { range: [0.25, 0.5], step: 0.05 },
     gainRange: { range: [0.1, 0.7], step: 0.05 },
     tickLength: 100,
-    modulatorRatio: { choose: [5 / 3, 3 / 2, 4 / 3] },
+    modulatorRatio: { choose: [10 / 3, 6 / 2, 8 / 3] },
     modulatorWobbleRange: { range: [0, 0], step: 1 },
     carrierWobbleRange: { range: [2, 7], step: 1 },
     name: 'Bells Long',

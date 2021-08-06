@@ -3,8 +3,6 @@ import ControlEnvelope from './control_envelope';
 import DensitySynth from './density_synth';
 import {
   minsToMs,
-  eighthTone,
-  betweenTone,
 } from './value_utils';
 import {
   pitchesJesseSolo,
@@ -71,55 +69,9 @@ const bellSynth = () => {
   });
 };
 
-const hiSynth = () => {
-  const densityEnvelope = new ControlEnvelope({
-    0: 0,
-  });
-
-  const pitchSets = {
-    0: {
-      choose: [
-        [Tone.Frequency('G5') * betweenTone, Tone.Frequency('F#5') * betweenTone],
-        Tone.Frequency('G5'),
-        Tone.Frequency('Bb5') * eighthTone,
-        Tone.Frequency('C6') * eighthTone,
-        Tone.Frequency('C6'),
-        Tone.Frequency('Eb6') * eighthTone,
-        Tone.Frequency('Eb6'),
-        Tone.Frequency('F6') * betweenTone,
-        Tone.Frequency('G6'),
-        Tone.Frequency('G6') * eighthTone,
-        Tone.Frequency('Bb6'),
-        Tone.Frequency('C7') * betweenTone,
-        Tone.Frequency('C7'),
-        Tone.Frequency('Eb7') * eighthTone,
-        Tone.Frequency('Eb7'),
-        Tone.Frequency('F7') * betweenTone,
-        [Tone.Frequency('F7') * betweenTone, Tone.Frequency('F7')],
-      ],
-    },
-  };
-
-  return new DensitySynth({
-    densityEnvelope,
-    pitchSets,
-    polyphony: 8,
-    lengthRange: { range: [2000, 5100], step: 100 },
-    sustainRatioRange: { range: [0.2, 0.4], step: 0.05 },
-    gainRange: { range: [0.15, 0.4], step: 0.05 },
-    tickLength: 100,
-    modulatorRatio: { choose: [10 / 3, 8 / 3] },
-    modulatorWobbleRange: { range: [0, 0], step: 1 },
-    carrierWobbleRange: { range: [4, 7], step: 1 },
-    name: 'HiSynth',
-    log: false,
-  });
-};
-
 const synths = [
   bassSynth(),
   bellSynth(),
-  hiSynth(),
 ];
 
 const score = {

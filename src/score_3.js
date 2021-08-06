@@ -11,6 +11,8 @@ import {
   pitchSetHiA,
   pitchSetHiB,
   pitchSetBassB,
+  pitchSetBassC,
+  pitchSetBassD,
 } from './pitch_sets';
 
 const bassSynth = () => {
@@ -24,6 +26,8 @@ const bassSynth = () => {
 
   const pitchSets = {
     0: pitchSetBassB,
+    [minsToMs(15)]: pitchSetBassC,
+    [minsToMs(20)]: pitchSetBassD,
   };
 
   return new DensitySynth({

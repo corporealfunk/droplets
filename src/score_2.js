@@ -5,12 +5,14 @@ import {
   minsToMs,
 } from './value_utils';
 import {
-  pitchSetBassA,
   pitchSetA,
   pitchSetB,
   pitchSetC,
   pitchSetHiA,
   pitchSetHiB,
+  pitchSetBassB,
+  pitchSetBassC,
+  pitchSetBassD,
 } from './pitch_sets';
 
 const bassSynth = () => {
@@ -23,7 +25,9 @@ const bassSynth = () => {
   });
 
   const pitchSets = {
-    0: pitchSetBassA,
+    0: pitchSetBassB,
+    [minsToMs(15)]: pitchSetBassC,
+    [minsToMs(20)]: pitchSetBassD,
   };
 
   return new DensitySynth({

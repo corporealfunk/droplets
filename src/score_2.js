@@ -19,10 +19,11 @@ import {
 const bassSynth = () => {
   const densityEnvelope = new ControlEnvelope({
     0: 0,
-    [minsToMs(2.8)]: 0,
-    [minsToMs(3)]: 0.5,
+    [minsToMs(1.4)]: 0,
+    [minsToMs(1.5)]: 0.5,
     [minsToMs(12)]: 0.8,
-    [minsToMs(35)]: 0.5,
+    [minsToMs(26)]: 0.5,
+    [minsToMs(32)]: 0,
   });
 
   const pitchSets = {
@@ -50,10 +51,11 @@ const bassSynth = () => {
 const bellSynth = () => {
   const densityEnvelope = new ControlEnvelope({
     0: 0,
-    [minsToMs(5)]: 0,
+    [minsToMs(4)]: 0,
     [minsToMs(12)]: 0.5,
-    [minsToMs(25)]: 1,
-    [minsToMs(35)]: 0.3,
+    [minsToMs(17.5)]: 0.9,
+    [minsToMs(28)]: 0.5,
+    [minsToMs(32)]: 0,
   });
 
   const pitchSets = {
@@ -82,15 +84,15 @@ const bellSynth = () => {
 const hiSynth = () => {
   const densityEnvelope = new ControlEnvelope({
     0: 0,
-    [minsToMs(18)]: 0,
-    [minsToMs(28)]: 1,
-    [minsToMs(30)]: 1,
-    [minsToMs(35)]: 0.3,
+    [minsToMs(16)]: 0,
+    [minsToMs(22)]: 0.9,
+    [minsToMs(29)]: 0.5,
+    [minsToMs(32)]: 0,
   });
 
   const pitchSets = {
     0: pitchSetHiA,
-    [minsToMs(28)]: pitchSetHiB,
+    [minsToMs(24)]: pitchSetHiB,
   };
 
   return new DensitySynth({

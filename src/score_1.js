@@ -16,7 +16,8 @@ const bassSynth = () => {
     [minsToMs(8)]: 0.8,
     [minsToMs(12)]: 1,
     [minsToMs(20)]: 1,
-    [minsToMs(35)]: 0.5,
+    [minsToMs(26)]: 0.5,
+    [minsToMs(32)]: 0,
   });
 
   const pitchSets = {
@@ -45,8 +46,9 @@ const bellSynth = () => {
     0: 0,
     [minsToMs(12)]: 0,
     [minsToMs(15)]: 0.8,
-    [minsToMs(25)]: 0.4,
-    [minsToMs(35)]: 0.25,
+    [minsToMs(18)]: 1,
+    [minsToMs(30)]: 0.25,
+    [minsToMs(32)]: 0,
   });
 
   const pitchSets = {

@@ -13,7 +13,7 @@ import {
 const bassSynth = () => {
   const densityEnvelope = new ControlEnvelope({
     0: 0.8,
-    [minsToMs(8)]: 0.8,
+    [minsToMs(8)]: 1,
     [minsToMs(12)]: 1,
     [minsToMs(20)]: 1,
     [minsToMs(26)]: 0.5,
@@ -44,11 +44,11 @@ const bassSynth = () => {
 const bellSynth = () => {
   const densityEnvelope = new ControlEnvelope({
     0: 0,
-    [minsToMs(12)]: 0,
+    [minsToMs(10)]: 0,
     [minsToMs(15)]: 0.8,
     [minsToMs(18)]: 1,
-    [minsToMs(30)]: 0.25,
-    [minsToMs(32)]: 0,
+    [minsToMs(30)]: 0.3,
+    [minsToMs(33)]: 0,
   });
 
   const pitchSets = {
@@ -58,7 +58,7 @@ const bellSynth = () => {
   return new DensitySynth({
     densityEnvelope,
     pitchSets,
-    polyphony: 6,
+    polyphony: 8,
     lengthRange: { range: [10000, 21000], step: 1000 },
     sustainRatioRange: { range: [0.25, 0.5], step: 0.05 },
     gainRange: { range: [0.1, 0.7], step: 0.05 },

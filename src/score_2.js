@@ -23,7 +23,7 @@ const bassSynth = () => {
     [minsToMs(1.1)]: 0.7,
     [minsToMs(12)]: 1,
     [minsToMs(26)]: 0.5,
-    [minsToMs(32)]: 0,
+    [minsToMs(33)]: 0,
   });
 
   const pitchSets = {
@@ -55,7 +55,7 @@ const bellSynth = () => {
     [minsToMs(12)]: 0.5,
     [minsToMs(17.5)]: 1,
     [minsToMs(28)]: 0.5,
-    [minsToMs(33)]: 0,
+    [minsToMs(34)]: 0,
   });
 
   const pitchSets = {
@@ -85,9 +85,9 @@ const hiSynth = () => {
   const densityEnvelope = new ControlEnvelope({
     0: 0,
     [minsToMs(16)]: 0,
-    [minsToMs(22)]: 1,
+    [minsToMs(23)]: 1,
     [minsToMs(29)]: 0.5,
-    [minsToMs(33)]: 0,
+    [minsToMs(34)]: 0,
   });
 
   const pitchSets = {

@@ -44,11 +44,11 @@ const bassSynth = () => {
 const bellSynth = () => {
   const densityEnvelope = new ControlEnvelope({
     0: 0,
-    [minsToMs(10)]: 0,
-    [minsToMs(15)]: 0.8,
+    [minsToMs(11)]: 0,
+    [minsToMs(16)]: 0.8,
     [minsToMs(18)]: 1,
     [minsToMs(30)]: 0.3,
-    [minsToMs(33)]: 0,
+    [minsToMs(34)]: 0,
   });
 
   const pitchSets = {

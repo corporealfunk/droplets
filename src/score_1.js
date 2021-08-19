@@ -12,7 +12,7 @@ import {
 
 const bassSynth = () => {
   const densityEnvelope = new ControlEnvelope({
-    0: 1,
+    0: 0.9,
     [minsToMs(20)]: 1,
     [minsToMs(26)]: 0.5,
     [minsToMs(32)]: 0,
